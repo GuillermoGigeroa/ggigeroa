@@ -1,8 +1,12 @@
-package ggigeroa.impresora.runner;
+package ggigeroa.impresora.runner.controller.rest;
 
 import java.util.Map;
 import java.util.HashMap;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RestController;
+import ggigeroa.impresora.runner.impl.ImagenRepository;
+import ggigeroa.impresora.runner.impl.RegistroRepository;
+import ggigeroa.impresora.runner.model.Registro;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -14,6 +18,12 @@ import org.slf4j.LoggerFactory;
 public class AppRestController {
 
 	private static final Logger logger = LoggerFactory.getLogger(AppRestController.class);
+
+	@Autowired
+	private ImagenRepository imagenRepository;
+
+	@Autowired
+	private RegistroRepository registroRepository;
 
 	@GetMapping(value = "/", produces = "application/json")
 	public Map<String, String> getObject() {
@@ -41,13 +51,21 @@ public class AppRestController {
 			@RequestBody Map<String, Object> requestBody) {
 		logger.info("POST /{}/{} called - path: {}, idUsuario: {}", path, idUsuario, path, idUsuario);
 
+		// Guardar registro de la operación
+		Registro registro = new Registro(path, idUsuario);
+		Registro savedRegistro = registroRepository.save(registro);
+		logger.info("Registro guardado: {}", savedRegistro);
+
 		Map<String, Object> response = new HashMap<>();
+		response.put("status", "success");
 		response.put("path", path);
 		response.put("idUsuario", idUsuario);
 		response.put("message", "POST called");
+		response.put("registroId", savedRegistro.getId());
 		response.put("receivedJson", requestBody);
 
 		return response;
 	}
 
 }
+
