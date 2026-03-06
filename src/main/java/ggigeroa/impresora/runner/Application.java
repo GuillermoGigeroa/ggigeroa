@@ -10,13 +10,14 @@ import ggigeroa.impresora.runner.db.DatabaseInitializer;
 @SpringBootApplication
 public class Application {
 	private static final Logger logger = LoggerFactory.getLogger(Application.class);
+	private static final String NAME = "Impresora";
 
 	public static void main(String[] args) {
-		logger.info("Iniciando Sistema de Impresora - Leandro");
+		logger.info("Iniciando "+NAME+ ".");
 		SpringApplication app = new SpringApplication(Application.class);
 		app.addInitializers(new DatabaseInitializer());
 		app.run(args);
-		logger.info("Sistema de Impresora iniciado correctamente");
+		logger.info(NAME + " iniciado correctamente.");
 	}
 
 }

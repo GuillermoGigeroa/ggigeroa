@@ -1,0 +1,399 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Impresora - Sistema de Gestión</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+        
+        .container {
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+            max-width: 800px;
+            width: 100%;
+            padding: 40px;
+        }
+        
+        h1 {
+            color: #333;
+            margin-bottom: 10px;
+            text-align: center;
+        }
+        
+        .subtitle {
+            color: #666;
+            text-align: center;
+            margin-bottom: 30px;
+            font-size: 14px;
+        }
+        
+        .section {
+            margin-bottom: 30px;
+        }
+        
+        .section h2 {
+            color: #667eea;
+            font-size: 18px;
+            margin-bottom: 15px;
+            border-bottom: 2px solid #667eea;
+            padding-bottom: 10px;
+        }
+        
+        .form-group {
+            margin-bottom: 15px;
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+            align-items: flex-end;
+        }
+        
+        label {
+            font-weight: 500;
+            color: #333;
+            display: block;
+            margin-bottom: 5px;
+            font-size: 14px;
+        }
+        
+        input, textarea {
+            padding: 10px 12px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-size: 14px;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            flex: 1;
+            min-width: 200px;
+        }
+        
+        textarea {
+            resize: vertical;
+            min-height: 100px;
+            flex-basis: 100%;
+        }
+        
+        input:focus, textarea:focus {
+            outline: none;
+            border-color: #667eea;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        }
+        
+        button {
+            background: #667eea;
+            color: white;
+            border: none;
+            padding: 10px 25px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 500;
+            transition: background 0.3s;
+        }
+        
+        button:hover {
+            background: #5568d3;
+        }
+        
+        button:active {
+            transform: scale(0.98);
+        }
+        
+        .response-box {
+            background: #f5f5f5;
+            border-left: 4px solid #667eea;
+            padding: 15px;
+            border-radius: 5px;
+            margin-top: 15px;
+            display: none;
+            max-height: 300px;
+            overflow-y: auto;
+        }
+        
+        .response-box.show {
+            display: block;
+        }
+        
+        .response-box pre {
+            color: #333;
+            font-size: 12px;
+            font-family: 'Courier New', monospace;
+            white-space: pre-wrap;
+            word-wrap: break-word;
+        }
+        
+        .status-badge {
+            display: inline-block;
+            padding: 5px 10px;
+            border-radius: 3px;
+            font-size: 12px;
+            font-weight: 500;
+            margin-bottom: 10px;
+        }
+        
+        .status-success {
+            background: #d4edda;
+            color: #155724;
+        }
+        
+        .status-error {
+            background: #f8d7da;
+            color: #721c24;
+        }
+        
+        .grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+        }
+        
+        @media (max-width: 600px) {
+            .grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .form-group {
+                flex-direction: column;
+            }
+            
+            input, textarea {
+                width: 100%;
+            }
+        }
+        
+        .info-box {
+            background: #e7f3ff;
+            border-left: 4px solid #2196F3;
+            padding: 12px;
+            border-radius: 5px;
+            font-size: 13px;
+            color: #0c5aa0;
+            margin-bottom: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🖨️ Sistema Impresora</h1>
+        <p class="subtitle">Interfaz de Gestión - Toda la lógica delegada a /api/</p>
+        
+        <div class="info-box">
+            ℹ️ Esta interfaz web comunica con los endpoints RESTful en <strong>/api</strong>
+        </div>
+        
+        <!-- Sección de Validación -->
+        <div class="section">
+            <h2>Validación del Sistema</h2>
+            <button onclick="validarSistema()">✓ Validar Estado</button>
+            <button onclick="obtenerInfo()">ℹ️ Obtener Información</button>
+            <div id="responseValidar" class="response-box"></div>
+        </div>
+        
+        <!-- Sección GET -->
+        <div class="section">
+            <h2>Consultar Datos (GET)</h2>
+            <div class="form-group">
+                <div style="flex: 1; min-width: 200px;">
+                    <label for="pathGet">Path:</label>
+                    <input type="text" id="pathGet" placeholder="ej: usuario, documento, etc." value="usuario">
+                </div>
+                <div style="flex: 1; min-width: 200px;">
+                    <label for="idGet">ID:</label>
+                    <input type="text" id="idGet" placeholder="ej: 123, abc, etc." value="001">
+                </div>
+                <button onclick="obtenerDatos()">📥 GET</button>
+            </div>
+            <div id="responseGet" class="response-box"></div>
+        </div>
+        
+        <!-- Sección POST -->
+        <div class="section">
+            <h2>Procesar/Crear Datos (POST)</h2>
+            <div class="grid">
+                <div>
+                    <label for="pathPost">Path:</label>
+                    <input type="text" id="pathPost" placeholder="ej: usuario" value="usuario">
+                </div>
+                <div>
+                    <label for="idPost">ID:</label>
+                    <input type="text" id="idPost" placeholder="ej: 123" value="001">
+                </div>
+            </div>
+            <label for="bodyPost">Datos JSON:</label>
+            <textarea id="bodyPost" placeholder='{"nombre": "Juan", "edad": 30}'>{
+  "nombre": "Juan Pérez",
+  "edad": 30,
+  "email": "juan@example.com"
+}</textarea>
+            <button onclick="procesarDatos()">📤 POST</button>
+            <div id="responsePost" class="response-box"></div>
+        </div>
+        
+        <!-- Sección PUT -->
+        <div class="section">
+            <h2>Actualizar Datos (PUT)</h2>
+            <div class="grid">
+                <div>
+                    <label for="pathPut">Path:</label>
+                    <input type="text" id="pathPut" placeholder="ej: usuario" value="usuario">
+                </div>
+                <div>
+                    <label for="idPut">ID:</label>
+                    <input type="text" id="idPut" placeholder="ej: 123" value="001">
+                </div>
+            </div>
+            <label for="bodyPut">Datos JSON:</label>
+            <textarea id="bodyPut" placeholder='{"nombre": "Nuevo Nombre"}'>{
+  "nombre": "Juan Carlos Pérez",
+  "edad": 31
+}</textarea>
+            <button onclick="actualizarDatos()">🔄 PUT</button>
+            <div id="responsePut" class="response-box"></div>
+        </div>
+        
+        <!-- Sección DELETE -->
+        <div class="section">
+            <h2>Eliminar Datos (DELETE)</h2>
+            <div class="grid">
+                <div>
+                    <label for="pathDelete">Path:</label>
+                    <input type="text" id="pathDelete" placeholder="ej: usuario" value="usuario">
+                </div>
+                <div>
+                    <label for="idDelete">ID:</label>
+                    <input type="text" id="idDelete" placeholder="ej: 123" value="001">
+                </div>
+            </div>
+            <button onclick="eliminarDatos()">🗑️ DELETE</button>
+            <div id="responseDelete" class="response-box"></div>
+        </div>
+    </div>
+    
+    <script>
+        function mostrarRespuesta(elementId, data, esError = false) {
+            const elemento = document.getElementById(elementId);
+            elemento.classList.add('show');
+            
+            let html = '';
+            if (esError) {
+                html += '<div class="status-badge status-error">❌ Error</div>';
+            } else {
+                html += '<div class="status-badge status-success">✓ Éxito</div>';
+            }
+            
+            html += '<pre>' + JSON.stringify(data, null, 2) + '</pre>';
+            elemento.innerHTML = html;
+        }
+        
+        function realizarFetch(url, metodo, datos = null) {
+            const opciones = {
+                method: metodo,
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            };
+            
+            if (datos) {
+                opciones.body = JSON.stringify(datos);
+            }
+            
+            return fetch(url, opciones)
+                .then(response => response.json())
+                .catch(error => {
+                    console.error('Error:', error);
+                    return { error: error.message };
+                });
+        }
+        
+        function validarSistema() {
+            realizarFetch('/api/validar', 'GET')
+                .then(data => mostrarRespuesta('responseValidar', data));
+        }
+        
+        function obtenerInfo() {
+            realizarFetch('/api/', 'GET')
+                .then(data => mostrarRespuesta('responseValidar', data));
+        }
+        
+        function obtenerDatos() {
+            const path = document.getElementById('pathGet').value || 'usuario';
+            const id = document.getElementById('idGet').value || '001';
+            
+            if (!path || !id) {
+                mostrarRespuesta('responseGet', { error: 'Path e ID son requeridos' }, true);
+                return;
+            }
+            
+            realizarFetch(`/api/${path}/${id}`, 'GET')
+                .then(data => mostrarRespuesta('responseGet', data));
+        }
+        
+        function procesarDatos() {
+            const path = document.getElementById('pathPost').value || 'usuario';
+            const id = document.getElementById('idPost').value || '001';
+            const bodyText = document.getElementById('bodyPost').value;
+            
+            if (!path || !id || !bodyText) {
+                mostrarRespuesta('responsePost', { error: 'Todos los campos son requeridos' }, true);
+                return;
+            }
+            
+            try {
+                const datos = JSON.parse(bodyText);
+                realizarFetch(`/api/${path}/${id}`, 'POST', datos)
+                    .then(data => mostrarRespuesta('responsePost', data));
+            } catch (e) {
+                mostrarRespuesta('responsePost', { error: 'JSON inválido: ' + e.message }, true);
+            }
+        }
+        
+        function actualizarDatos() {
+            const path = document.getElementById('pathPut').value || 'usuario';
+            const id = document.getElementById('idPut').value || '001';
+            const bodyText = document.getElementById('bodyPut').value;
+            
+            if (!path || !id || !bodyText) {
+                mostrarRespuesta('responsePut', { error: 'Todos los campos son requeridos' }, true);
+                return;
+            }
+            
+            try {
+                const datos = JSON.parse(bodyText);
+                realizarFetch(`/api/${path}/${id}`, 'PUT', datos)
+                    .then(data => mostrarRespuesta('responsePut', data));
+            } catch (e) {
+                mostrarRespuesta('responsePut', { error: 'JSON inválido: ' + e.message }, true);
+            }
+        }
+        
+        function eliminarDatos() {
+            const path = document.getElementById('pathDelete').value || 'usuario';
+            const id = document.getElementById('idDelete').value || '001';
+            
+            if (!path || !id) {
+                mostrarRespuesta('responseDelete', { error: 'Path e ID son requeridos' }, true);
+                return;
+            }
+            
+            if (confirm(`¿Estás seguro de que deseas eliminar ${path}/${id}?`)) {
+                realizarFetch(`/api/${path}/${id}`, 'DELETE')
+                    .then(data => mostrarRespuesta('responseDelete', data));
+            }
+        }
+    </script>
+</body>
+</html>

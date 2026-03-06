@@ -13,9 +13,9 @@ import java.util.Map;
 
 @RestController
 @RequestMapping("/api")
-public class AppRestController {
+public class AppApiRestController {
     
-    private final AppLogger log = new AppLogger(AppRestController.class);
+    private final AppLogger log = new AppLogger(AppApiRestController.class);
     
     @Autowired
     private Environment environment;
