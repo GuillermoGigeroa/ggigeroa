@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Error - Impresora</title>
+	<style>
+		* {
+			margin: 0;
+			padding: 0;
+			box-sizing: border-box;
+		}
+
+		body {
+			font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+			background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+			min-height: 100vh;
+			display: flex;
+			align-items: center;
+			justify-content: center;
+			padding: 20px;
+		}
+
+		.error-container {
+			background: white;
+			border-radius: 15px;
+			box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+			max-width: 600px;
+			width: 100%;
+			padding: 50px;
+			text-align: center;
+		}
+
+		.error-icon {
+			font-size: 80px;
+			margin-bottom: 20px;
+			display: block;
+			animation: shake 0.5s ease-in-out;
+		}
+
+		@keyframes shake {
+			0%, 100% {
+				transform: rotate(0deg);
+			}
+			10%, 30%, 50%, 70%, 90% {
+				transform: rotate(-5deg);
+			}
+			20%, 40%, 60%, 80% {
+				transform: rotate(5deg);
+			}
+		}
+
+		.status-code {
+			font-size: 72px;
+			font-weight: 700;
+			color: #f56565;
+			margin: 20px 0;
+			font-family: 'Courier New', monospace;
+		}
+
+		.status-text {
+			font-size: 28px;
+			color: #333;
+			margin-bottom: 15px;
+			font-weight: 600;
+		}
+
+		.error-message {
+			font-size: 16px;
+			color: #666;
+			margin-bottom: 30px;
+			line-height: 1.6;
+			background: #f9f9f9;
+			padding: 15px;
+			border-radius: 8px;
+			border-left: 4px solid #f56565;
+		}
+
+		.error-details {
+			background: #f0f0f0;
+			padding: 15px;
+			border-radius: 8px;
+			margin-bottom: 30px;
+			text-align: left;
+			font-size: 13px;
+			font-family: 'Courier New', monospace;
+			color: #555;
+			max-height: 150px;
+			overflow-y: auto;
+		}
+
+		.error-details p {
+			margin: 5px 0;
+		}
+
+		.button-group {
+			display: flex;
+			gap: 15px;
+			flex-wrap: wrap;
+			justify-content: center;
+		}
+
+		a, button {
+			padding: 12px 30px;
+			border: none;
+			border-radius: 8px;
+			cursor: pointer;
+			font-size: 15px;
+			font-weight: 600;
+			text-decoration: none;
+			transition: all 0.3s ease;
+			display: inline-block;
+		}
+
+		.btn-primary {
+			background: #667eea;
+			color: white;
+		}
+
+		.btn-primary:hover {
+			background: #5568d3;
+			transform: translateY(-2px);
+			box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+		}
+
+		.btn-secondary {
+			background: #e0e0e0;
+			color: #333;
+		}
+
+		.btn-secondary:hover {
+			background: #d0d0d0;
+			transform: translateY(-2px);
+		}
+
+		.info-section {
+			background: #e7f3ff;
+			border-left: 4px solid #2196F3;
+			padding: 15px;
+			border-radius: 8px;
+			margin-top: 20px;
+			font-size: 13px;
+			color: #0c5aa0;
+		}
+
+		.info-section strong {
+			display: block;
+			margin-bottom: 8px;
+		}
+
+		@media (max-width: 600px) {
+			.error-container {
+				padding: 30px;
+			}
+
+			.status-code {
+				font-size: 48px;
+			}
+
+			.status-text {
+				font-size: 20px;
+			}
+
+			.button-group {
+				flex-direction: column;
+			}
+
+			a, button {
+				width: 100%;
+			}
+		}
+
+		.error-code-info {
+			background: #fff3cd;
+			border-left: 4px solid #ffc107;
+			padding: 12px;
+			border-radius: 5px;
+			margin-top: 15px;
+			font-size: 12px;
+			color: #856404;
+			display: none;
+		}
+
+		.error-code-info.show {
+			display: block;
+		}
+	</style>
+</head>
+<body>
+	<div class="error-container">
+		<span class="error-icon">⚠️</span>
+
+		<div class="status-code" th:text="${statusCode}">500</div>
+		<div class="status-text" th:text="${statusText}">Error</div>
+
+		<div class="error-message" th:if="${errorMessage}">
+			<strong>Descripción:</strong>
+			<p th:text="${errorMessage}">Algo salió mal en la aplicación</p>
+		</div>
+
+		<div class="error-details">
+			<p><strong>Código de Error:</strong></p>
+			<p th:text="${'Status Code: ' + statusCode}">Status Code: 500</p>
+			<p><strong>Hora del Error:</strong></p>
+			<p th:text="${#dates.format(new java.util.Date(timestamp), 'dd/MM/yyyy HH:mm:ss')}">
+				Timestamp
+			</p>
+		</div>
+
+		<div class="button-group">
+			<a href="/" class="btn-primary">🏠 Volver al Inicio</a>
+			<button class="btn-secondary" onclick="window.history.back()">⬅️ Volver Atrás</button>
+		</div>
+
+		<div class="info-section">
+			<strong>💡 Información útil:</strong>
+			<ul style="margin-left: 20px; margin-top: 10px;">
+				<li>Intenta recargar la página (F5)</li>
+				<li>Limpia el cache del navegador</li>
+				<li>Verifica tu conexión a internet</li>
+				<li th:if="${statusCode >= 500}">Si el problema persiste, contacta al administrador</li>
+			</ul>
+		</div>
+
+		<!-- Información específica por código de error -->
+		<div th:if="${statusCode == 404}" class="info-section" style="background: #f0f7ff; border-left-color: #2196F3; color: #0c5aa0;">
+			<strong>❌ Error 404 - Página no encontrada</strong>
+			<p style="margin-top: 8px;">La URL que intentaste acceder no existe o fue movida a otra ubicación.</p>
+		</div>
+
+		<div th:if="${statusCode == 403}" class="info-section" style="background: #fff5f5; border-left-color: #f56565; color: #742a2a;">
+			<strong>🔒 Error 403 - Acceso Prohibido</strong>
+			<p style="margin-top: 8px;">No tienes permisos para acceder a este recurso. Asegúrate de estar autenticado con las credenciales correctas.</p>
+		</div>
+
+		<div th:if="${statusCode == 401}" class="info-section" style="background: #fff5f5; border-left-color: #f56565; color: #742a2a;">
+			<strong>🔐 Error 401 - No Autorizado</strong>
+			<p style="margin-top: 8px;">Debes iniciar sesión para acceder a este recurso. Por favor, proporciona credenciales válidas.</p>
+		</div>
+
+		<div th:if="${statusCode == 500}" class="info-section" style="background: #fff5f5; border-left-color: #f56565; color: #742a2a;">
+			<strong>⚠️ Error 500 - Error Interno del Servidor</strong>
+			<p style="margin-top: 8px;">Ocurrió un error inesperado en el servidor. El equipo de administración ha sido notificado y está trabajando para solucionarlo.</p>
+		</div>
+
+		<div th:if="${statusCode == 503}" class="info-section" style="background: #fff5f5; border-left-color: #f56565; color: #742a2a;">
+			<strong>🔧 Error 503 - Servicio no disponible</strong>
+			<p style="margin-top: 8px;">El servidor está temporalmente bajo mantenimiento o sobrecargado. Intenta nuevamente en unos momentos.</p>
+		</div>
+	</div>
+</body>
+</html>

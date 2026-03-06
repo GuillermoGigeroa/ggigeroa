@@ -52,6 +52,12 @@
 	        </exclusions>
 		</dependency>
 
+		<!-- Thymeleaf Template Engine -->
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-thymeleaf</artifactId>
+		</dependency>
+
 		<!-- Database & Persistence -->
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
