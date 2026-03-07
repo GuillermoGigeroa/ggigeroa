@@ -17,7 +17,8 @@ import java.sql.SQLException;
 public class DataSourceConfiguration {
     private static final Logger logger = LoggerFactory.getLogger(DataSourceConfiguration.class);
     
-    private final Environment environment;
+    @SuppressWarnings("unused")
+	private final Environment environment;
     
     public DataSourceConfiguration(Environment environment) {
         this.environment = environment;

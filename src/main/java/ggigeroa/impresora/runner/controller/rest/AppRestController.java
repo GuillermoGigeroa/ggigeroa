@@ -19,6 +19,7 @@ public class AppRestController {
 
 	private static final Logger logger = LoggerFactory.getLogger(AppRestController.class);
 
+	@SuppressWarnings("unused")
 	@Autowired
 	private ImagenRepository imagenRepository;
 

@@ -1,17 +1,59 @@
 # Sistema de Impresora - Leandro
 
-Sistema Spring Boot para manejo de impresoras con ejemplos de patrones y utilidades.
+Sistema Spring Boot para manejo de impresoras con ejemplos de patrones y utilidades de desarrollo profesional.
+
+## 📋 Descripción General
+
+Este proyecto es una aplicación **Spring Boot 3.5.10** completa que demuestra buenas prácticas en el desarrollo de aplicaciones Java empresariales. Incluye arquitectura MVC y REST API, manejo de bases de datos opcional, autenticación HTTP Basic, logging centralizado y documentación con Swagger/OpenAPI.
 
 ## Características
 
-- Spring Boot 3.5.10
-- Java 17
-- MySQL (Opcional - inicia sin BD disponible)
-- HTTP Basic Auth
-- Swagger/OpenAPI
-- Logging con SLF4J
+## ⚙️ Requisitos Previos
 
-## Estructura del Proyecto
+- **Java 17** o superior
+- **Maven 3.8+** (se incluye Maven Wrapper `mvnw`)
+- **MySQL 5.7+** (opcional - la aplicación inicia sin BD)
+- **Git** (recomendado)
+
+## 🛠️ Stack Tecnológico
+
+### Core
+- **Spring Boot 3.5.10** - Framework principal
+- **Java 17** - Lenguaje de programación
+- **Maven** - Gestor de dependencias y build
+
+### Bases de Datos
+- **MySQL** (opcional)
+- **Spring Data JPA** - ORM
+
+### API & Documentación
+- **Spring Web** - REST Controllers
+- **Springdoc OpenAPI 2.x** - Swagger UI
+- **Jackson** - JSON serialization
+
+### Seguridad
+- **Spring Security** - Autenticación HTTP Basic
+- **Spring Boot Actuator** - Health checks
+
+### Logging
+- **SLF4J** - Logging facade
+- **Logback** - Implementación de logging
+
+## 📦 Características
+
+- ✅ REST API completa con endpoints CRUD
+- ✅ Arquitectura MVC con templates HTML
+- ✅ Autenticación HTTP Basic integrada
+- ✅ Swagger UI para documentación interactiva
+- ✅ Logging centralizado con AppLogger
+- ✅ Manejo graceful de BD no disponible
+- ✅ Processing de tareas largas en background
+- ✅ Validación de salud de aplicación
+- ✅ Respuestas JSON estandarizadas
+- ✅ Manejo de excepciones global
+- ✅ Ejemplos de patrones de diseño Spring
+
+## 📁 Estructura del Proyecto
 
 ```
 ggigeroa/
@@ -41,61 +83,70 @@ ggigeroa/
 └── pom.xml
 ```
 
-## Inicio Rápido
+## 🚀 Inicio Rápido
 
-### Compilar
+### 1️⃣ Clonar o Descargar Proyecto
 
 ```bash
+# Clonar desde repositorio
+git clone <url-del-repositorio>
+cd ggigeroa
+```
+
+### 2️⃣ Compilar
+
+```bash
+# Con Maven Wrapper (recomendado)
 mvnw.cmd clean package -DskipTests
+
+# O con Maven instalado globalmente
+maven clean package -DskipTests
 ```
 
-### Ejecutar
+### 3️⃣ Ejecutar
 
 ```bash
+# Opción 1: Con Maven Wrapper
 mvnw.cmd spring-boot:run
-```
 
-O con JAR:
-```bash
+# Opción 2: Ejecutar JAR directamente
 java -jar target/impresora.ggigeroa-0.0.1-SNAPSHOT.jar
+
+# Opción 3: Con Maven
+maven spring-boot:run
 ```
 
-## Acceso a Endpoints
+### 4️⃣ Verificar Instalación
 
-Todos los endpoints requieren autenticación HTTP Basic:
-- Usuario: `leandro`
-- Contraseña: `impresora123`
-
-### Health Check
 ```bash
+# Acceder a Swagger UI (requiere autenticación)
+http://localhost:8080/swagger-ui.html
+
+# Usuario: leandro
+# Contraseña: impresora123
+
+# O ejecutar health check
 curl -u leandro:impresora123 http://localhost:8080/api/
 ```
 
-### Ver Configuración
-```bash
-curl -u leandro:impresora123 http://localhost:8080/admin/configuracion
+## 🔐 Configuración de Seguridad
+
+La aplicación utiliza **HTTP Basic Authentication** con credenciales hardcodeadas (desarrollo):
+
+```
+Usuario: leandro
+Contraseña: impresora123
 ```
 
-### Swagger UI
-```
-http://localhost:8080/swagger-ui.html
-```
+**⚠️ Para Producción:**
+- Cambiar a OAuth2/JWT
+- Usar variables de entorno
+- Implementar base de datos de usuarios
+- Usar HTTPS/TLS
 
-## Lectura Recomendada
+## 🗄️ Configuración de Base de Datos
 
-1. **README.md** ← Estás aquí
-2. **EJEMPLOS.md** - Cómo usar las utilidades
-3. **ENDPOINTS.md** - Referencia de API completa
-
-## Documentación
-
-- **EJEMPLOS.md** - Ejemplos de uso de Spring Boot y utilidades
-- **ENDPOINTS.md** - Documentación completa de endpoints
-- **agent.md** - Contexto técnico del proyecto
-
-## Base de Datos
-
-La aplicación está configurada para MySQL pero puede iniciar sin BD disponible.
+### Configuración Predeterminada (MySQL)
 
 ```properties
 spring.datasource.url=jdbc:mysql://localhost:3306/impresora_db
@@ -103,109 +154,366 @@ spring.datasource.username=root
 spring.datasource.password=
 ```
 
-Si la BD no está disponible:
-1. Se logea: "No se pudo detectar base de datos..."
-2. Se deshabilita JPA automáticamente
-3. La aplicación continúa funcionando sin persistencia
+### Sin Base de Datos
 
-## Utilidades Disponibles
+La aplicación está diseñada para funcionar **sin BD disponible**:
 
-### AppLogger
-Logger personalizado que wrappea SLF4J.
+1. Al iniciar, intenta conectar a MySQL
+2. Si falla la conexión, se deshabilita JPA automáticamente
+3. Log: `"No se pudo detectar base de datos..."`
+4. La aplicación continúa funcionando con endpoints funcionales
+
+Para crear la BD manualmente:
+
+```sql
+CREATE DATABASE impresora_db;
+USE impresora_db;
+
+CREATE TABLE imagen (
+    id BIGINT PRIMARY KEY AUTO_INCREMENT,
+    nombre VARCHAR(255),
+    datos LONGBLOB
+);
+
+CREATE TABLE registro (
+    id BIGINT PRIMARY KEY AUTO_INCREMENT,
+    tipo VARCHAR(50),
+    contenido TEXT,
+    fecha_creacion TIMESTAMP
+);
+```
+
+## 📚 Inicio Rápido
+
+## 📚 Endpoints Disponibles
+
+### Health & Admin
+- `GET /api/` - Health check (requiere autenticación)
+- `GET /admin/info` - Información del sistema
+- `GET /admin/health` - Estado de salud
+- `GET /admin/configuracion` - Configuración actual
+- `POST /admin/procesar` - Procesar en background
+
+### REST API v1
+- `GET /api/v1/echo` - Echo endpoint
+- `GET /api/v1/estadisticas/{tipo}` - Obtener estadísticas
+- `POST /api/v1/procesar` - Procesar con servicio
+- `POST /api/v1/tarea-larga` - Ejecutar tarea larga
+
+### REST API Genérica
+- `GET /api/{path}/{id}` - Obtener recurso
+- `POST /api/{path}/{id}` - Procesar recurso
+- `PUT /api/{path}/{id}` - Actualizar recurso
+- `DELETE /api/{path}/{id}` - Eliminar recurso
+
+### MVC (HTML)
+- `GET /` - Página de inicio
+- `GET /error` - Página de error
+
+## 📖 Lectura Recomendada
+
+1. **README.md** ← Estás aquí
+2. **EJEMPLOS.md** - Ejemplos de uso de Spring Boot y utilidades
+3. **ENDPOINTS.md** - Referencia completa de API
+4. **agent.md** - Contexto técnico del proyecto
+
+## 🛠️ Utilidades Disponibles
+
+El proyecto incluye tres componentes principales:
+
+### 1️⃣ AppLogger - Logger Personalizado
+
 ```java
 private final AppLogger log = new AppLogger(MiClase.class);
-log.operacionIniciada("operacion");
-log.operacionCompletada("operacion");
+
+// Métodos disponibles
+log.operacionIniciada("nombreOperacion");
+log.operacionCompletada("nombreOperacion");
+log.debug("Mensaje de debug");
+log.info("Mensaje informativo");
+log.warn("Advertencia");
+log.error("Error detectado");
 ```
 
-### AppUtils
-Utilidades estáticas globales.
+**Ventajas:**
+- Wrapper sobre SLF4J
+- Logging consistente
+- Fácil de usar y cambiar a nivel global
+
+### 2️⃣ AppUtils - Utilidades Estáticas
+
 ```java
-AppUtils.generarIdUnico();
-AppUtils.crearRespuestaExitosa(mensaje, datos);
-AppUtils.procesarEnThread(nombre, runnable);
+// Generar ID único
+String id = AppUtils.generarIdUnico();
+
+// Crear respuesta exitosa
+Map<String, Object> respuesta = AppUtils.crearRespuestaExitosa(
+    "Operación completada", 
+    datos
+);
+
+// Procesar en thread separado
+AppUtils.procesarEnThread("MiTarea", () -> {
+    // Código a ejecutar en background
+});
+
+// Obtener información del sistema
+String info = AppUtils.obtenerInfo();
 ```
 
-### AppService
-Servicio de negocio inyectable.
+**Utilidad para:**
+- Generación de IDs
+- Respuestas estandarizadas
+- Processing asíncrono
+- Información del sistema
+
+### 3️⃣ AppService - Servicio de Negocio
+
 ```java
 @Autowired
 private AppService appService;
-appService.procesarInformacion(datos);
+
+// Inyectado automáticamente por Spring
+public void miMetodo() {
+    appService.procesarInformacion(datos);
+    appService.ejecutarProceso();
+}
 ```
 
-## Controladores
+**Características:**
+- Singleton inyectable
+- Lógica de negocio centralizada
+- Acceso a dependencias Spring
 
-### AppController (MVC)
-- `/admin/info` - Información
-- `/admin/procesar` - Procesar en background
-- `/admin/health` - Health check
-- `/admin/configuracion` - Configuración
+## 🏗️ Arquitectura del Proyecto
 
-### AppRestController (REST)
-- `GET /api/{path}/{id}` - Obtener
-- `POST /api/{path}/{id}` - Procesar
-- `PUT /api/{path}/{id}` - Actualizar
-- `DELETE /api/{path}/{id}` - Eliminar
+## 🎯 Componentes Principales
 
-### AppAdvancedController (REST v1)
-- `POST /api/v1/procesar` - Procesar con servicio
-- `GET /api/v1/estadisticas/{tipo}` - Estadísticas
-- `POST /api/v1/tarea-larga` - Tarea larga
-- `GET /api/v1/echo` - Echo
+### Controllers (Controladores)
 
-## Seguridad
+#### AppController (MVC - Vistas HTML)
+```
+Endpoints:
+- GET  /admin/info        → Información del sistema
+- GET  /admin/health      → Estado de salud
+- GET  /admin/configuracion → Configuración actual
+- POST /admin/procesar    → Procesar en background
+```
 
-HTTP Basic Auth con credenciales hardcodeadas (desarrollo).
+#### AppRestController (REST API Genérica)
+```
+Endpoints:
+- GET    /api/{path}/{id}  → Obtener recurso
+- POST   /api/{path}/{id}  → Procesar recurso
+- PUT    /api/{path}/{id}  → Actualizar recurso
+- DELETE /api/{path}/{id}  → Eliminar recurso
+```
 
-Para producción, usar OAuth2/JWT y variables de entorno.
+#### AppAdvancedController (REST API v1 - Avanzada)
+```
+Endpoints:
+- GET  /api/v1/echo                → Echo test
+- GET  /api/v1/estadisticas/{tipo} → Obtener estadísticas
+- POST /api/v1/procesar            → Procesar con servicio
+- POST /api/v1/tarea-larga         → Ejecutar tarea larga
+```
 
-## Características de Spring Boot
+### Services (Servicios de Negocio)
 
-El proyecto incluye ejemplos de:
+- **AppService** - Lógica de negocio central
+  - Procesamiento de información
+  - Ejecución de operaciones
+  - Acceso a repositorios
 
-- **@RestController** - Controladores REST
-- **@Service** - Servicios anotados
-- **@Autowired** - Inyección de dependencias
-- **@Value** - Inyección de propiedades
-- **@RequestMapping/@GetMapping/@PostMapping** - Mapeo de rutas
-- **@PathVariable/@RequestParam/@RequestBody** - Parámetros
-- **ResponseEntity** - Control de respuestas HTTP
-- **@ExceptionHandler** - Manejo de excepciones
-- **Environment** - Acceso a propiedades
-- **Spring Data JPA** - Persistencia ORM
-- **Conditional Beans** - Beans condicionales
-- **ApplicationContextInitializer** - Inicializadores
-- **System.setProperty** - Propiedades dinámicas
+### Data Access (Persistencia)
 
-## Logging
+- **ImagenRepository** - JpaRepository para entidad Imagen
+  - CRUD de imágenes
+  - Almacenamiento en base64
 
-Todos los componentes usan SLF4J a través de AppLogger.
+- **RegistroRepository** - JpaRepository para entidad Registro
+  - CRUD de registros
+  - Auditoría de operaciones
 
-Niveles configurados:
-- root: INFO
-- ggigeroa.impresora.runner: DEBUG
-- org.springframework.security: DEBUG
+### Configuration (Configuración)
 
-## Base de Datos (Opcional)
+- **SecurityConfig** - Configuración de seguridad HTTP Basic
+- **SwaggerConfig** - Configuración de OpenAPI/Swagger UI
+- **DataSourceConfiguration** - Configuración de base de datos
+- **JpaDisabledConfiguration** - Deshabilitación condicional de JPA
 
-Entidades JPA:
-- `Imagen` - almacena imágenes en base64
-- `Registro` - almacena registros genéricos
+## 📊 Modelos de Datos
 
-Repositorios:
-- `ImagenRepository` - extends JpaRepository<Imagen, Long>
-- `RegistroRepository` - extends JpaRepository<Registro, Long>
+### Imagen
+```java
+id: Long              // Primary Key
+nombre: String        // Nombre de la imagen
+datos: byte[]         // Datos en base64
+```
 
-## Notas Importantes
+### Registro
+```java
+id: Long              // Primary Key
+tipo: String          // Tipo de registro
+contenido: String     // Contenido del registro
+fechaCreacion: LocalDateTime // Timestamp
+```
 
-1. **Sin Lombok** - Constructores y getters/setters manuales
-2. **Inicia sin BD** - JPA se deshabilita automáticamente si falla la conexión
-3. **Responses estándar** - Todas las respuestas JSON siguen un patrón consistente
-4. **Threads** - Las tareas largas se procesan en threads separados
-5. **Logging** - Usar AppLogger, nunca System.out.println()
+## 📝 Ejemplos de Uso
 
-## Contacto
+### Ejemplo 1: Autenticación Básica
 
-Sistema desarrollado para Leandro.
-Documento actualizado: 06/03/2026
+```bash
+# Sin autenticación (falla)
+curl http://localhost:8080/api/
+# → 401 Unauthorized
+
+# Con autenticación (exitosa)
+curl -u leandro:impresora123 http://localhost:8080/api/
+# → {"status": "OK", "message": "Sistema operativo"}
+```
+
+### Ejemplo 2: Obtener Estadísticas
+
+```bash
+curl -u leandro:impresora123 \
+  http://localhost:8080/api/v1/estadisticas/usuarios
+# → {"status": "OK", "data": {...}}
+```
+
+### Ejemplo 3: Ejecutar Tarea Larga
+
+```bash
+curl -u leandro:impresora123 -X POST \
+  http://localhost:8080/api/v1/tarea-larga \
+  -H "Content-Type: application/json" \
+  -d '{"duracion": 5000}'
+# → Procesa en background, retorna ID de tarea
+```
+
+### Ejemplo 4: Usar AppUtils en Controlador
+
+```java
+@RestController
+public class MiControlador {
+    
+    @GetMapping("/datos")
+    public ResponseEntity<?> obtenerDatos() {
+        String idUnico = AppUtils.generarIdUnico();
+        Map<String, Object> respuesta = AppUtils.crearRespuestaExitosa(
+            "Datos obtenidos",
+            Map.of("id", idUnico)
+        );
+        return ResponseEntity.ok(respuesta);
+    }
+}
+```
+
+## 🔍 Logging
+
+Configuración de niveles:
+```properties
+logging.level.root=INFO
+logging.level.ggigeroa.impresora.runner=DEBUG
+logging.level.org.springframework.security=DEBUG
+```
+
+Todos los componentes utilizan `AppLogger` que implementa SLF4J/Logback internamente.
+
+## 🎓 Características de Spring Boot Demostradas
+
+El proyecto incluye ejemplos prácticos de:
+
+| Anotación | Descripción | Ubicación |
+|-----------|-------------|-----------|
+| `@RestController` | Controlador REST | AppRestController.java |
+| `@Service` | Servicio de negocio | AppService.java |
+| `@Autowired` | Inyección de dependencias | Todos los controllers |
+| `@Value` | Inyección de propiedades | SecurityConfig.java |
+| `@RequestMapping/@GetMapping` | Mapeo de rutas HTTP | Controllers |
+| `@PathVariable` | Parámetros de ruta | AppRestController.java |
+| `@RequestParam` | Parámetros de query | Controllers |
+| `@RequestBody` | Cuerpo de solicitud JSON | Controllers |
+| `ResponseEntity` | Control de respuestas HTTP | Todos los endpoints |
+| `@ExceptionHandler` | Manejo global de excepciones | ErrorPageController.java |
+| `@Configuration` | Configuración de Spring | SecurityConfig.java |
+| `@ConditionalOnProperty` | Beans condicionales | JpaDisabledConfiguration.java |
+| `Environment` | Acceso a propiedades | Configuración |
+| `ApplicationContextInitializer` | Inicializadores | DatabaseInitializer.java |
+| **Spring Data JPA** | Persistencia ORM | ImagenRepository.java |
+
+## 📋 Mejores Prácticas Implementadas
+
+✅ **Arquitectura en capas** - Controllers → Services → Repositories
+✅ **Inyección de dependencias** - Totalmente basada en Spring Beans
+✅ **Manejo de excepciones global** - ErrorPageController
+✅ **Logging consistente** - AppLogger en todos lados
+✅ **Respuestas JSON estandarizadas** - Patrón único
+✅ **Seguridad** - HTTP Basic Auth implementado
+✅ **Documentación API** - Swagger/OpenAPI integrado
+✅ **Health checks** - Monitoreo de aplicación
+✅ **Processing asíncrono** - Tareas en background
+✅ **Sin Lombok** - Código explícito y legible
+✅ **Graceful degradation** - Funciona sin BD
+
+## 🐛 Solución de Problemas
+
+### Problema: Puerto 8080 en uso
+```bash
+# Cambiar puerto en application.properties
+server.port=8081
+```
+
+### Problema: Credenciales incorrectas
+```bash
+# Verificar en SecurityConfig.java
+Usuario por defecto: leandro
+Contraseña por defecto: impresora123
+```
+
+### Problema: MySQL no disponible
+```
+→ La aplicación detecta la ausencia de BD
+→ Deshabilita JPA automáticamente
+→ Continúa funcionando con endpoints
+```
+
+### Problema: Swagger UI no carga
+```bash
+# Verificar que Springdoc esté incluido
+# Ver dependencias en pom.xml
+# Acceder a http://localhost:8080/swagger-ui.html
+```
+
+## 📚 Recursos Adicionales
+
+- [Spring Boot Official Documentation](https://spring.io/projects/spring-boot)
+- [Spring Security Reference](https://docs.spring.io/spring-security/reference/)
+- [Spring Data JPA Documentation](https://spring.io/projects/spring-data-jpa)
+- [Springdoc OpenAPI Documentation](https://springdoc.org/)
+- [SLF4J Manual](https://www.slf4j.org/manual.html)
+
+## 👨‍💼 Información del Proyecto
+
+| Campo | Valor |
+|-------|-------|
+| **Nombre** | Sistema de Impresora - Leandro |
+| **Versión** | 0.0.1-SNAPSHOT |
+| **Java** | 17+ |
+| **Spring Boot** | 3.5.10 |
+| **Build Tool** | Maven |
+| **Licencia** | Ver LICENSE |
+| **Última Actualización** | 07/03/2026 |
+
+## 📞 Soporte
+
+Sistema desarrollado para **Leandro**.
+
+Para reportar problemas o sugerencias, consulte la documentación complementaria:
+- `EJEMPLOS.md` - Ejemplos de código
+- `ENDPOINTS.md` - Referencia de API
+- `agent.md` - Contexto técnico
+
+---
+
+**Nota:** Este es un proyecto de demostración educativa que sigue buenas prácticas de desarrollo profesional en Java/Spring Boot.
