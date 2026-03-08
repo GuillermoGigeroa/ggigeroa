@@ -27,10 +27,10 @@ public class SecurityConfig {
 	@Bean
 	public UserDetailsService userDetailsService(PasswordEncoder encoder) {
 		UserDetails user = User.builder()
-			.username("ggigeroa")
-			.password(encoder.encode("admin"))
-			.roles("USER", "ADMIN")
-			.build();
+				.username("ggigeroa")
+				.password(encoder.encode("admin"))
+				.roles("USER", "ADMIN")
+				.build();
 
 		return new InMemoryUserDetailsManager(user);
 	}
@@ -52,22 +52,23 @@ public class SecurityConfig {
 	@Bean
 	public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
 		http
-			.csrf(csrf -> csrf.disable())
-			.authorizeHttpRequests(authz -> authz
-				.requestMatchers(
-					"/",
-					"/swagger-ui.html",
-					"/swagger-ui/**",
-					"/v3/api-docs/**",
-					"/swagger-resources/**",
-					"/webjars/**"
-				).permitAll()
-				.anyRequest().authenticated()
-			)
-			.httpBasic(basic -> {})
-			.sessionManagement(session -> session
-				.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
-			);
+				.csrf(csrf -> csrf.disable())
+				.authorizeHttpRequests(authz -> authz
+						.requestMatchers(
+								"/",
+								"/swagger-ui.html",
+								"/swagger-ui/**",
+								"/v3/api-docs/**",
+								"/swagger-resources/**",
+								"/webjars/**",
+								"/h2-console/**")
+						.permitAll()
+						.anyRequest().authenticated())
+				.headers(headers -> headers.frameOptions(frameOptions -> frameOptions.sameOrigin()))
+				.httpBasic(basic -> {
+				})
+				.sessionManagement(session -> session
+						.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
 
 		return http.build();
 	}
