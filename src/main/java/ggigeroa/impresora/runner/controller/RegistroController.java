@@ -17,11 +17,17 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.tags.Tag;
+
 import ggigeroa.impresora.runner.impl.RegistroRepository;
 import ggigeroa.impresora.runner.model.Registro;
 
 @RestController
 @RequestMapping("/api/registros")
+@Tag(name = "Registros", description = "API para gestionar los registros de impresiones o archivos")
 public class RegistroController {
 
     private static final Logger logger = LoggerFactory.getLogger(RegistroController.class);
@@ -29,22 +35,32 @@ public class RegistroController {
     @Autowired
     private RegistroRepository registroRepository;
 
+    @Operation(summary = "Obtener todos los registros", description = "Devuelve una lista con todos los registros almacenados en la base de datos.")
+    @ApiResponse(responseCode = "200", description = "Lista obtenida exitosamente")
     @GetMapping
     public ResponseEntity<List<Registro>> listarTodos() {
         logger.info("GET /api/registros - Listando todos los registros");
         return ResponseEntity.ok(registroRepository.findAll());
     }
 
+    @Operation(summary = "Obtener un registro por ID", description = "Busca y devuelve los detalles de un registro específico a partir de su ID.")
+    @ApiResponse(responseCode = "200", description = "Registro encontrado exitosamente")
+    @ApiResponse(responseCode = "404", description = "El registro no existe")
     @GetMapping("/{id}")
-    public ResponseEntity<Registro> obtenerPorId(@PathVariable Long id) {
+    public ResponseEntity<Registro> obtenerPorId(
+            @Parameter(description = "ID único del registro a buscar", required = true) @PathVariable Long id) {
         logger.info("GET /api/registros/{} - Buscando registro", id);
         return registroRepository.findById(id)
                 .map(ResponseEntity::ok)
                 .orElse(ResponseEntity.notFound().build());
     }
 
+    @Operation(summary = "Crear un nuevo registro", description = "Almacena la información de un nuevo registro en la base de datos.")
+    @ApiResponse(responseCode = "201", description = "Registro creado exitosamente")
+    @ApiResponse(responseCode = "500", description = "Error interno al crear el registro")
     @PostMapping
-    public ResponseEntity<Registro> crear(@RequestBody Registro registro) {
+    public ResponseEntity<Registro> crear(
+            @Parameter(description = "Objeto Registro conteniendo el path y usuario", required = true) @RequestBody Registro registro) {
         logger.info("POST /api/registros - Creando nuevo registro");
         try {
             Registro nuevoRegistro = registroRepository.save(registro);
@@ -55,8 +71,14 @@ public class RegistroController {
         }
     }
 
+    @Operation(summary = "Actualizar un registro existente", description = "Modifica los datos (path y usuario) de un registro ya existente mediante su ID.")
+    @ApiResponse(responseCode = "200", description = "Registro actualizado exitosamente")
+    @ApiResponse(responseCode = "404", description = "El registro a actualizar no existe")
+    @ApiResponse(responseCode = "500", description = "Error interno al actualizar el registro")
     @PutMapping("/{id}")
-    public ResponseEntity<Registro> actualizar(@PathVariable Long id, @RequestBody Registro datosNuevos) {
+    public ResponseEntity<Registro> actualizar(
+            @Parameter(description = "ID del registro a actualizar", required = true) @PathVariable Long id,
+            @Parameter(description = "Nuevos datos del registro", required = true) @RequestBody Registro datosNuevos) {
         logger.info("PUT /api/registros/{} - Actualizando registro", id);
         Optional<Registro> registroExistente = registroRepository.findById(id);
 
@@ -77,8 +99,12 @@ public class RegistroController {
         }
     }
 
+    @Operation(summary = "Eliminar un registro", description = "Borra físicamente un registro de la base de datos utilizando su ID.")
+    @ApiResponse(responseCode = "204", description = "Registro eliminado exitosamente (Sin contenido)")
+    @ApiResponse(responseCode = "404", description = "El registro a borrar no existe")
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> eliminar(@PathVariable Long id) {
+    public ResponseEntity<Void> eliminar(
+            @Parameter(description = "ID del registro a eliminar", required = true) @PathVariable Long id) {
         logger.info("DELETE /api/registros/{} - Eliminando registro", id);
         if (registroRepository.existsById(id)) {
             registroRepository.deleteById(id);

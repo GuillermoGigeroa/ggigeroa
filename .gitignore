@@ -5,8 +5,6 @@ target/
 !**/src/test/**/target/
 
 ### CONFIG ###
-agent.md
-
 ### STS ###
 .apt_generated
 .classpath
