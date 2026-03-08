@@ -3,145 +3,254 @@
 <head>
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
-	<title>Panel de Control - Impresora</title>
+	<title>Panel de Control - Sistema Impresora</title>
     <style>
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
         }
+
+        :root {
+            --primary-color: #007bff;
+            --secondary-color: #6c757d;
+            --dark-color: #1a1a1a;
+            --light-color: #f8f9fa;
+            --success-color: #28a745;
+            --warning-color: #ffc107;
+            --danger-color: #dc3545;
+            --border-radius: 8px;
+            --transition: all 0.3s ease;
+        }
+        
+        html {
+            scroll-behavior: smooth;
+        }
         
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             min-height: 100vh;
-            display: flex;
-            align-items: center;
-            justify-content: center;
             padding: 20px;
+            line-height: 1.6;
+            color: #333;
         }
         
         .container {
             background: white;
-            border-radius: 10px;
+            border-radius: var(--border-radius);
             box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
-            max-width: 800px;
+            max-width: 1200px;
             width: 100%;
+            margin: 0 auto;
+            padding: 0;
+            overflow: hidden;
+        }
+        
+        .header {
+            background: linear-gradient(135deg, var(--primary-color) 0%, #0056b3 100%);
+            color: white;
+            padding: 40px 20px;
+            text-align: center;
+        }
+        
+        .header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+            font-weight: 700;
+        }
+        
+        .header p {
+            font-size: 1.1rem;
+            opacity: 0.9;
+        }
+        
+        .content {
             padding: 40px;
         }
         
-        h1 {
-            color: #333;
-            margin-bottom: 10px;
-            text-align: center;
+        .nav-tabs {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 30px;
+            flex-wrap: wrap;
+            border-bottom: 2px solid var(--light-color);
+            padding-bottom: 0;
         }
         
-        .subtitle {
-            color: #666;
-            text-align: center;
-            margin-bottom: 30px;
-            font-size: 14px;
+        .nav-tabs button {
+            background: none;
+            border: none;
+            padding: 12px 20px;
+            cursor: pointer;
+            font-size: 1rem;
+            font-weight: 600;
+            color: var(--secondary-color);
+            border-bottom: 3px solid transparent;
+            transition: var(--transition);
+            position: relative;
+            bottom: -2px;
+        }
+        
+        .nav-tabs button:hover {
+            color: var(--primary-color);
+        }
+        
+        .nav-tabs button.active {
+            color: var(--primary-color);
+            border-bottom-color: var(--primary-color);
         }
         
         .section {
             margin-bottom: 30px;
+            display: none;
+        }
+        
+        .section.active {
+            display: block;
+            animation: fadeIn 0.3s ease-in;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
         }
         
         .section h2 {
-            color: #667eea;
-            font-size: 18px;
-            margin-bottom: 15px;
-            border-bottom: 2px solid #667eea;
+            color: var(--primary-color);
+            font-size: 1.8rem;
+            margin-bottom: 20px;
+            border-bottom: 2px solid var(--light-color);
             padding-bottom: 10px;
         }
         
         .form-group {
-            margin-bottom: 15px;
+            margin-bottom: 20px;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 15px;
+        }
+        
+        .form-item {
             display: flex;
-            gap: 10px;
-            flex-wrap: wrap;
-            align-items: flex-end;
+            flex-direction: column;
         }
         
         label {
-            font-weight: 500;
-            color: #333;
-            display: block;
-            margin-bottom: 5px;
-            font-size: 14px;
+            font-weight: 600;
+            color: var(--dark-color);
+            margin-bottom: 8px;
+            font-size: 0.95rem;
         }
         
-        input, textarea {
-            padding: 10px 12px;
+        input, textarea, select {
+            padding: 12px;
             border: 1px solid #ddd;
-            border-radius: 5px;
-            font-size: 14px;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            flex: 1;
-            min-width: 200px;
+            border-radius: var(--border-radius);
+            font-size: 0.95rem;
+            font-family: inherit;
+            transition: var(--transition);
+        }
+        
+        input:focus, textarea:focus, select:focus {
+            outline: none;
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.1);
         }
         
         textarea {
             resize: vertical;
-            min-height: 100px;
-            flex-basis: 100%;
+            min-height: 120px;
+            grid-column: 1 / -1;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9rem;
         }
         
-        input:focus, textarea:focus {
-            outline: none;
-            border-color: #667eea;
-            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        .button-group {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+            margin-top: 20px;
         }
         
         button {
-            background: #667eea;
+            background: var(--primary-color);
             color: white;
             border: none;
-            padding: 10px 25px;
-            border-radius: 5px;
+            padding: 12px 24px;
+            border-radius: var(--border-radius);
             cursor: pointer;
-            font-size: 14px;
-            font-weight: 500;
-            transition: background 0.3s;
+            font-size: 0.95rem;
+            font-weight: 600;
+            transition: var(--transition);
+            white-space: nowrap;
         }
         
         button:hover {
-            background: #5568d3;
+            background: #0056b3;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
         }
         
         button:active {
-            transform: scale(0.98);
+            transform: translateY(0);
+        }
+        
+        button.btn-success {
+            background: var(--success-color);
+        }
+        
+        button.btn-success:hover {
+            background: #218838;
+        }
+        
+        button.btn-danger {
+            background: var(--danger-color);
+        }
+        
+        button.btn-danger:hover {
+            background: #c82333;
         }
         
         .response-box {
-            background: #f5f5f5;
-            border-left: 4px solid #667eea;
-            padding: 15px;
-            border-radius: 5px;
-            margin-top: 15px;
+            background: var(--light-color);
+            border-left: 4px solid var(--primary-color);
+            padding: 20px;
+            border-radius: var(--border-radius);
+            margin-top: 20px;
             display: none;
-            max-height: 300px;
+            max-height: 400px;
             overflow-y: auto;
         }
         
         .response-box.show {
             display: block;
+            animation: slideIn 0.3s ease;
+        }
+        
+        @keyframes slideIn {
+            from { opacity: 0; max-height: 0; }
+            to { opacity: 1; max-height: 400px; }
         }
         
         .response-box pre {
             color: #333;
-            font-size: 12px;
+            font-size: 0.85rem;
             font-family: 'Courier New', monospace;
             white-space: pre-wrap;
             word-wrap: break-word;
+            background: white;
+            padding: 15px;
+            border-radius: 4px;
+            border: 1px solid #ddd;
         }
         
         .status-badge {
             display: inline-block;
-            padding: 5px 10px;
-            border-radius: 3px;
-            font-size: 12px;
-            font-weight: 500;
+            padding: 8px 12px;
+            border-radius: 4px;
+            font-size: 0.9rem;
+            font-weight: 600;
             margin-bottom: 10px;
         }
         
@@ -155,135 +264,294 @@
             color: #721c24;
         }
         
-        .grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 10px;
+        .info-box {
+            background: #e7f3ff;
+            border-left: 4px solid var(--primary-color);
+            padding: 15px;
+            border-radius: var(--border-radius);
+            font-size: 0.95rem;
+            color: #0c5aa0;
+            margin-bottom: 20px;
         }
         
-        @media (max-width: 600px) {
-            .grid {
-                grid-template-columns: 1fr;
+        .warning-box {
+            background: #fff3cd;
+            border-left: 4px solid var(--warning-color);
+            padding: 15px;
+            border-radius: var(--border-radius);
+            font-size: 0.95rem;
+            color: #856404;
+            margin-bottom: 20px;
+        }
+        
+        .footer {
+            background: var(--light-color);
+            padding: 20px;
+            text-align: center;
+            color: var(--secondary-color);
+            border-top: 1px solid #ddd;
+        }
+        
+        .credentials-section {
+            background: white;
+            padding: 20px;
+            border-radius: var(--border-radius);
+            border: 2px solid var(--light-color);
+            margin-bottom: 20px;
+        }
+        
+        .credentials-section h3 {
+            color: var(--primary-color);
+            margin-bottom: 15px;
+        }
+        
+        .credential-item {
+            display: flex;
+            gap: 15px;
+            padding: 10px 0;
+            border-bottom: 1px solid var(--light-color);
+        }
+        
+        .credential-item:last-child {
+            border-bottom: none;
+        }
+        
+        .credential-item strong {
+            color: var(--dark-color);
+            min-width: 120px;
+        }
+        
+        .credential-item code {
+            background: var(--light-color);
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-family: 'Courier New', monospace;
+            color: var(--primary-color);
+        }
+        
+        @media (max-width: 768px) {
+            .header h1 {
+                font-size: 1.8rem;
+            }
+            
+            .content {
+                padding: 20px;
             }
             
             .form-group {
+                grid-template-columns: 1fr;
+            }
+            
+            .button-group {
                 flex-direction: column;
             }
             
-            input, textarea {
+            button {
                 width: 100%;
             }
-        }
-        
-        .info-box {
-            background: #e7f3ff;
-            border-left: 4px solid #2196F3;
-            padding: 12px;
-            border-radius: 5px;
-            font-size: 13px;
-            color: #0c5aa0;
-            margin-bottom: 20px;
+            
+            .nav-tabs {
+                gap: 5px;
+            }
+            
+            .nav-tabs button {
+                padding: 10px 15px;
+                font-size: 0.9rem;
+            }
         }
     </style>
 </head>
 <body>
     <div class="container">
-        <h1>🖨️ Sistema Impresora</h1>
-        <p class="subtitle">Interfaz de Gestión - Toda la lógica delegada a /api/</p>
-        
-        <div class="info-box">
-            ℹ️ Esta interfaz web comunica con los endpoints RESTful en <strong>/api</strong>
+        <div class="header">
+            <h1>🖨️ Sistema Impresora</h1>
+            <p>Panel de Control - API REST Completo</p>
         </div>
         
-        <!-- Sección de Validación -->
-        <div class="section">
-            <h2>Validación del Sistema</h2>
-            <button onclick="validarSistema()">✓ Validar Estado</button>
-            <button onclick="obtenerInfo()">ℹ️ Obtener Información</button>
-            <div id="responseValidar" class="response-box"></div>
-        </div>
-        
-        <!-- Sección GET -->
-        <div class="section">
-            <h2>Consultar Datos (GET)</h2>
-            <div class="form-group">
-                <div style="flex: 1; min-width: 200px;">
-                    <label for="pathGet">Path:</label>
-                    <input type="text" id="pathGet" placeholder="ej: usuario, documento, etc." value="usuario">
-                </div>
-                <div style="flex: 1; min-width: 200px;">
-                    <label for="idGet">ID:</label>
-                    <input type="text" id="idGet" placeholder="ej: 123, abc, etc." value="001">
-                </div>
-                <button onclick="obtenerDatos()">📥 GET</button>
+        <div class="content">
+            <div class="info-box">
+                ℹ️ Esta interfaz web comunica directamente con los endpoints RESTful en <strong>/api/</strong>
             </div>
-            <div id="responseGet" class="response-box"></div>
-        </div>
-        
-        <!-- Sección POST -->
-        <div class="section">
-            <h2>Procesar/Crear Datos (POST)</h2>
-            <div class="grid">
-                <div>
-                    <label for="pathPost">Path:</label>
-                    <input type="text" id="pathPost" placeholder="ej: usuario" value="usuario">
-                </div>
-                <div>
-                    <label for="idPost">ID:</label>
-                    <input type="text" id="idPost" placeholder="ej: 123" value="001">
-                </div>
+            
+            <!-- Navigation Tabs -->
+            <div class="nav-tabs">
+                <button class="active" onclick="mostrarSeccion('validacion')">✓ Validación</button>
+                <button onclick="mostrarSeccion('get')">📥 GET</button>
+                <button onclick="mostrarSeccion('post')">📤 POST</button>
+                <button onclick="mostrarSeccion('put')">🔄 PUT</button>
+                <button onclick="mostrarSeccion('delete')">🗑️ DELETE</button>
+                <button onclick="mostrarSeccion('info')">ℹ️ Información</button>
             </div>
-            <label for="bodyPost">Datos JSON:</label>
-            <textarea id="bodyPost" placeholder='{"nombre": "Juan", "edad": 30}'>{
+            
+            <!-- Sección Validación -->
+            <div id="validacion" class="section active">
+                <h2>✓ Validación del Sistema</h2>
+                <p>Valida el estado actual del servidor y obtiene información de la aplicación.</p>
+                <div class="button-group">
+                    <button class="btn-success" onclick="validarSistema()">Validar Estado</button>
+                    <button class="btn-success" onclick="obtenerInfo()">Obtener Información</button>
+                </div>
+                <div id="responseValidar" class="response-box"></div>
+            </div>
+            
+            <!-- Sección GET -->
+            <div id="get" class="section">
+                <h2>📥 Consultar Datos (GET)</h2>
+                <p>Obtiene datos de un recurso específico mediante su ID.</p>
+                <div class="form-group">
+                    <div class="form-item">
+                        <label for="pathGet">Path:</label>
+                        <input type="text" id="pathGet" placeholder="ej: usuario, documento, registro" value="usuario">
+                    </div>
+                    <div class="form-item">
+                        <label for="idGet">ID:</label>
+                        <input type="text" id="idGet" placeholder="ej: 123, abc, 001" value="001">
+                    </div>
+                </div>
+                <div class="button-group">
+                    <button class="btn-success" onclick="obtenerDatos()">📥 GET</button>
+                </div>
+                <div id="responseGet" class="response-box"></div>
+            </div>
+            
+            <!-- Sección POST -->
+            <div id="post" class="section">
+                <h2>📤 Procesar/Crear Datos (POST)</h2>
+                <p>Envía datos al servidor para procesar o crear nuevos registros.</p>
+                <div class="form-group">
+                    <div class="form-item">
+                        <label for="pathPost">Path:</label>
+                        <input type="text" id="pathPost" placeholder="ej: usuario, documento" value="usuario">
+                    </div>
+                    <div class="form-item">
+                        <label for="idPost">ID:</label>
+                        <input type="text" id="idPost" placeholder="ej: 123, 001" value="001">
+                    </div>
+                </div>
+                <label for="bodyPost">Datos JSON:</label>
+                <textarea id="bodyPost">{
   "nombre": "Juan Pérez",
   "edad": 30,
-  "email": "juan@example.com"
+  "email": "juan@example.com",
+  "departamento": "Tecnología"
 }</textarea>
-            <button onclick="procesarDatos()">📤 POST</button>
-            <div id="responsePost" class="response-box"></div>
-        </div>
-        
-        <!-- Sección PUT -->
-        <div class="section">
-            <h2>Actualizar Datos (PUT)</h2>
-            <div class="grid">
-                <div>
-                    <label for="pathPut">Path:</label>
-                    <input type="text" id="pathPut" placeholder="ej: usuario" value="usuario">
+                <div class="button-group">
+                    <button class="btn-success" onclick="procesarDatos()">📤 POST</button>
                 </div>
-                <div>
-                    <label for="idPut">ID:</label>
-                    <input type="text" id="idPut" placeholder="ej: 123" value="001">
-                </div>
+                <div id="responsePost" class="response-box"></div>
             </div>
-            <label for="bodyPut">Datos JSON:</label>
-            <textarea id="bodyPut" placeholder='{"nombre": "Nuevo Nombre"}'>{
+            
+            <!-- Sección PUT -->
+            <div id="put" class="section">
+                <h2>🔄 Actualizar Datos (PUT)</h2>
+                <p>Modifica los datos de un recurso existente.</p>
+                <div class="form-group">
+                    <div class="form-item">
+                        <label for="pathPut">Path:</label>
+                        <input type="text" id="pathPut" placeholder="ej: usuario, documento" value="usuario">
+                    </div>
+                    <div class="form-item">
+                        <label for="idPut">ID:</label>
+                        <input type="text" id="idPut" placeholder="ej: 123, 001" value="001">
+                    </div>
+                </div>
+                <label for="bodyPut">Datos JSON:</label>
+                <textarea id="bodyPut">{
   "nombre": "Juan Carlos Pérez",
-  "edad": 31
+  "edad": 31,
+  "email": "jcarlos@example.com"
 }</textarea>
-            <button onclick="actualizarDatos()">🔄 PUT</button>
-            <div id="responsePut" class="response-box"></div>
-        </div>
-        
-        <!-- Sección DELETE -->
-        <div class="section">
-            <h2>Eliminar Datos (DELETE)</h2>
-            <div class="grid">
-                <div>
-                    <label for="pathDelete">Path:</label>
-                    <input type="text" id="pathDelete" placeholder="ej: usuario" value="usuario">
+                <div class="button-group">
+                    <button class="btn-success" onclick="actualizarDatos()">🔄 PUT</button>
                 </div>
-                <div>
-                    <label for="idDelete">ID:</label>
-                    <input type="text" id="idDelete" placeholder="ej: 123" value="001">
+                <div id="responsePut" class="response-box"></div>
+            </div>
+            
+            <!-- Sección DELETE -->
+            <div id="delete" class="section">
+                <h2>🗑️ Eliminar Datos (DELETE)</h2>
+                <p>Elimina un recurso existente del servidor.</p>
+                <div class="warning-box">
+                    ⚠️ Esta operación es destructiva y no se puede deshacer.
+                </div>
+                <div class="form-group">
+                    <div class="form-item">
+                        <label for="pathDelete">Path:</label>
+                        <input type="text" id="pathDelete" placeholder="ej: usuario, documento" value="usuario">
+                    </div>
+                    <div class="form-item">
+                        <label for="idDelete">ID:</label>
+                        <input type="text" id="idDelete" placeholder="ej: 123, 001" value="001">
+                    </div>
+                </div>
+                <div class="button-group">
+                    <button class="btn-danger" onclick="eliminarDatos()">🗑️ DELETE</button>
+                </div>
+                <div id="responseDelete" class="response-box"></div>
+            </div>
+            
+            <!-- Sección Información -->
+            <div id="info" class="section">
+                <h2>ℹ️ Información del Sistema</h2>
+                <div class="credentials-section">
+                    <h3>🔐 Credenciales por Defecto</h3>
+                    <div class="credential-item">
+                        <strong>Usuario:</strong>
+                        <code>ggigeroa</code>
+                    </div>
+                    <div class="credential-item">
+                        <strong>Contraseña:</strong>
+                        <code>admin</code>
+                    </div>
+                </div>
+                
+                <div class="credentials-section">
+                    <h3>📚 Documentación</h3>
+                    <ul style="margin-left: 20px; line-height: 2;">
+                        <li><strong>Swagger UI:</strong> <code>/swagger-ui.html</code></li>
+                        <li><strong>OpenAPI JSON:</strong> <code>/v3/api-docs</code></li>
+                        <li><strong>Health Check:</strong> <code>GET /api/</code></li>
+                    </ul>
+                </div>
+                
+                <div class="credentials-section">
+                    <h3>🛠️ Tecnologías</h3>
+                    <ul style="margin-left: 20px; line-height: 2;">
+                        <li>Java 17</li>
+                        <li>Spring Boot 3.5.10</li>
+                        <li>Spring Web & Spring Security</li>
+                        <li>Spring Data JPA (opcional)</li>
+                        <li>MySQL 5.7+ (opcional)</li>
+                        <li>Swagger UI / OpenAPI 2.x</li>
+                    </ul>
+                </div>
+                
+                <div class="info-box" style="margin-top: 20px;">
+                    Para más información, consulta el archivo <strong>README.md</strong> en el repositorio.
                 </div>
             </div>
-            <button onclick="eliminarDatos()">🗑️ DELETE</button>
-            <div id="responseDelete" class="response-box"></div>
+        </div>
+        
+        <div class="footer">
+            <p>&copy; 2026 Sistema Impresora • Desarrollado con Spring Boot</p>
         </div>
     </div>
     
     <script>
+        function mostrarSeccion(seccionId) {
+            // Ocultar todas las secciones
+            const secciones = document.querySelectorAll('.section');
+            secciones.forEach(s => s.classList.remove('active'));
+            
+            // Mostrar la sección seleccionada
+            document.getElementById(seccionId).classList.add('active');
+            
+            // Actualizar botones activos
+            const botones = document.querySelectorAll('.nav-tabs button');
+            botones.forEach(b => b.classList.remove('active'));
+            event.target.classList.add('active');
+        }
+        
         function mostrarRespuesta(elementId, data, esError = false) {
             const elemento = document.getElementById(elementId);
             elemento.classList.add('show');
@@ -315,18 +583,18 @@
                 .then(response => response.json())
                 .catch(error => {
                     console.error('Error:', error);
-                    return { error: error.message };
+                    return { error: error.message, tipo: 'Error de Conexión' };
                 });
         }
         
         function validarSistema() {
             realizarFetch('/api/validar', 'GET')
-                .then(data => mostrarRespuesta('responseValidar', data));
+                .then(data => mostrarRespuesta('responseValidar', data, !data || data.error));
         }
         
         function obtenerInfo() {
             realizarFetch('/api/', 'GET')
-                .then(data => mostrarRespuesta('responseValidar', data));
+                .then(data => mostrarRespuesta('responseValidar', data, !data || data.error));
         }
         
         function obtenerDatos() {
@@ -339,7 +607,7 @@
             }
             
             realizarFetch(`/api/${path}/${id}`, 'GET')
-                .then(data => mostrarRespuesta('responseGet', data));
+                .then(data => mostrarRespuesta('responseGet', data, !data || data.error));
         }
         
         function procesarDatos() {
@@ -355,7 +623,7 @@
             try {
                 const datos = JSON.parse(bodyText);
                 realizarFetch(`/api/${path}/${id}`, 'POST', datos)
-                    .then(data => mostrarRespuesta('responsePost', data));
+                    .then(data => mostrarRespuesta('responsePost', data, !data || data.error));
             } catch (e) {
                 mostrarRespuesta('responsePost', { error: 'JSON inválido: ' + e.message }, true);
             }
@@ -374,7 +642,7 @@
             try {
                 const datos = JSON.parse(bodyText);
                 realizarFetch(`/api/${path}/${id}`, 'PUT', datos)
-                    .then(data => mostrarRespuesta('responsePut', data));
+                    .then(data => mostrarRespuesta('responsePut', data, !data || data.error));
             } catch (e) {
                 mostrarRespuesta('responsePut', { error: 'JSON inválido: ' + e.message }, true);
             }
@@ -389,11 +657,15 @@
                 return;
             }
             
-            if (confirm(`¿Estás seguro de que deseas eliminar ${path}/${id}?`)) {
+            if (confirm(`¿Estás seguro de que deseas eliminar ${path}/${id}?\n\nEsta acción no se puede deshacer.`)) {
                 realizarFetch(`/api/${path}/${id}`, 'DELETE')
-                    .then(data => mostrarRespuesta('responseDelete', data));
+                    .then(data => mostrarRespuesta('responseDelete', data, !data || data.error));
             }
         }
+        
+        // Log al cargar
+        console.log('Panel de Control - Sistema Impresora');
+        console.log('Documentación: http://localhost:8080/swagger-ui.html');
     </script>
 </body>
 </html>

@@ -3,12 +3,19 @@
 <head>
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
-	<title>Error - Impresora</title>
+	<title>Error - Sistema Impresora</title>
 	<style>
 		* {
 			margin: 0;
 			padding: 0;
 			box-sizing: border-box;
+		}
+
+		:root {
+			--primary-color: #007bff;
+			--danger-color: #dc3545;
+			--warning-color: #ffc107;
+			--dark-color: #1a1a1a;
 		}
 
 		body {
@@ -23,44 +30,53 @@
 
 		.error-container {
 			background: white;
-			border-radius: 15px;
+			border-radius: 10px;
 			box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
-			max-width: 600px;
+			max-width: 700px;
 			width: 100%;
 			padding: 50px;
 			text-align: center;
+			animation: slideUp 0.5s ease-out;
+		}
+
+		@keyframes slideUp {
+			from {
+				opacity: 0;
+				transform: translateY(30px);
+			}
+			to {
+				opacity: 1;
+				transform: translateY(0);
+			}
 		}
 
 		.error-icon {
 			font-size: 80px;
 			margin-bottom: 20px;
 			display: block;
-			animation: shake 0.5s ease-in-out;
+			animation: pulse 2s infinite;
 		}
 
-		@keyframes shake {
+		@keyframes pulse {
 			0%, 100% {
-				transform: rotate(0deg);
+				transform: scale(1);
 			}
-			10%, 30%, 50%, 70%, 90% {
-				transform: rotate(-5deg);
-			}
-			20%, 40%, 60%, 80% {
-				transform: rotate(5deg);
+			50% {
+				transform: scale(1.1);
 			}
 		}
 
 		.status-code {
 			font-size: 72px;
 			font-weight: 700;
-			color: #f56565;
+			color: var(--danger-color);
 			margin: 20px 0;
 			font-family: 'Courier New', monospace;
 		}
 
 		.status-text {
 			font-size: 28px;
-			color: #333;
+			color: var(--dark-color);
 			margin-bottom: 15px;
 			font-weight: 600;
 		}
@@ -73,7 +89,7 @@
 			background: #f9f9f9;
 			padding: 15px;
 			border-radius: 8px;
-			border-left: 4px solid #f56565;
+			border-left: 4px solid var(--danger-color);
 		}
 
 		.error-details {
@@ -113,19 +129,19 @@
 		}
 
 		.btn-primary {
-			background: #667eea;
+			background: var(--primary-color);
 			color: white;
 		}
 
 		.btn-primary:hover {
-			background: #5568d3;
+			background: #0056b3;
 			transform: translateY(-2px);
-			box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+			box-shadow: 0 5px 15px rgba(0, 123, 255, 0.4);
 		}
 
 		.btn-secondary {
 			background: #e0e0e0;
-			color: #333;
+			color: var(--dark-color);
 		}
 
 		.btn-secondary:hover {
@@ -135,7 +151,7 @@
 
 		.info-section {
 			background: #e7f3ff;
-			border-left: 4px solid #2196F3;
+			border-left: 4px solid var(--primary-color);
 			padding: 15px;
 			border-radius: 8px;
 			margin-top: 20px;
@@ -146,6 +162,30 @@
 		.info-section strong {
 			display: block;
 			margin-bottom: 8px;
+		}
+
+		.info-section ul {
+			margin-left: 20px;
+			margin-top: 10px;
+		}
+
+		.info-section li {
+			margin: 5px 0;
+		}
+
+		.error-code-info-404 {
+			background: #f0f7ff;
+			border-left-color: var(--primary-color);
+			color: #0c5aa0;
+		}
+
+		.error-code-info-403,
+		.error-code-info-401,
+		.error-code-info-500,
+		.error-code-info-503 {
+			background: #fff5f5;
+			border-left-color: var(--danger-color);
+			color: #742a2a;
 		}
 
 		@media (max-width: 600px) {
@@ -168,21 +208,35 @@
 			a, button {
 				width: 100%;
 			}
+
+			.error-icon {
+				font-size: 60px;
+			}
 		}
 
-		.error-code-info {
-			background: #fff3cd;
-			border-left: 4px solid #ffc107;
-			padding: 12px;
-			border-radius: 5px;
-			margin-top: 15px;
-			font-size: 12px;
-			color: #856404;
-			display: none;
+		.divider {
+			height: 1px;
+			background: #e0e0e0;
+			margin: 25px 0;
 		}
 
-		.error-code-info.show {
-			display: block;
+		.documentation-link {
+			margin-top: 20px;
+			padding: 15px;
+			background: #f9f9f9;
+			border-radius: 8px;
+		}
+
+		.documentation-link a {
+			padding: 8px 16px;
+			background: var(--primary-color);
+			color: white;
+			font-size: 14px;
+			margin: 5px;
+		}
+
+		.documentation-link a:hover {
+			background: #0056b3;
 		}
 	</style>
 </head>
@@ -193,7 +247,7 @@
 		<div class="status-code" th:text="${statusCode}">500</div>
 		<div class="status-text" th:text="${statusText}">Error</div>
 
-		<div class="error-message" th:if="${errorMessage}">
+		<div th:if="${errorMessage}" class="error-message">
 			<strong>Descripción:</strong>
 			<p th:text="${errorMessage}">Algo salió mal en la aplicación</p>
 		</div>
@@ -202,9 +256,7 @@
 			<p><strong>Código de Error:</strong></p>
 			<p th:text="${'Status Code: ' + statusCode}">Status Code: 500</p>
 			<p><strong>Hora del Error:</strong></p>
-			<p th:text="${#dates.format(new java.util.Date(timestamp), 'dd/MM/yyyy HH:mm:ss')}">
-				Timestamp
-			</p>
+			<p th:text="${#dates.format(new java.util.Date(timestamp), 'dd/MM/yyyy HH:mm:ss')}">Timestamp</p>
 		</div>
 
 		<div class="button-group">
@@ -212,40 +264,54 @@
 			<button class="btn-secondary" onclick="window.history.back()">⬅️ Volver Atrás</button>
 		</div>
 
-		<div class="info-section">
-			<strong>💡 Información útil:</strong>
-			<ul style="margin-left: 20px; margin-top: 10px;">
-				<li>Intenta recargar la página (F5)</li>
+		<div class="divider"></div>
+
+		<!-- Información específica por código de error -->
+		<div th:if="${statusCode == 404}" class="info-section error-code-info-404">
+			<strong>❌ Error 404 - Página no encontrada</strong>
+			<p style="margin-top: 8px;">La URL que intentaste acceder no existe o fue movida a otra ubicación.</p>
+		</div>
+
+		<div th:if="${statusCode == 403}" class="info-section error-code-info-403">
+			<strong>🔒 Error 403 - Acceso Prohibido</strong>
+			<p style="margin-top: 8px;">No tienes permisos para acceder a este recurso. Asegúrate de estar autenticado con las credenciales correctas.</p>
+		</div>
+
+		<div th:if="${statusCode == 401}" class="info-section error-code-info-401">
+			<strong>🔐 Error 401 - No Autorizado</strong>
+			<p style="margin-top: 8px;">Debes iniciar sesión para acceder a este recurso. Proporciona credenciales válidas.</p>
+		</div>
+
+		<div th:if="${statusCode == 500}" class="info-section error-code-info-500">
+			<strong>⚠️ Error 500 - Error Interno del Servidor</strong>
+			<p style="margin-top: 8px;">Ocurrió un error inesperado en el servidor. El equipo de administración ha sido notificado.</p>
+		</div>
+
+		<div th:if="${statusCode == 503}" class="info-section error-code-info-503">
+			<strong>🔧 Error 503 - Servicio no disponible</strong>
+			<p style="margin-top: 8px;">El servidor está temporalmente bajo mantenimiento. Intenta nuevamente en unos momentos.</p>
+		</div>
+
+		<div th:unless="${statusCode == 404 || statusCode == 403 || statusCode == 401 || statusCode == 500 || statusCode == 503}" class="info-section">
+			<strong>ℹ️ Información del error</strong>
+			<p style="margin-top: 8px;">Se ha producido un error. Por favor, intenta nuevamente más tarde.</p>
+		</div>
+
+		<div class="info-section" style="margin-top: 20px;">
+			<strong>💡 Soluciones recomendadas:</strong>
+			<ul>
+				<li>Intenta recargar la página (F5 o Ctrl+R)</li>
 				<li>Limpia el cache del navegador</li>
 				<li>Verifica tu conexión a internet</li>
 				<li th:if="${statusCode >= 500}">Si el problema persiste, contacta al administrador</li>
 			</ul>
 		</div>
 
-		<!-- Información específica por código de error -->
-		<div th:if="${statusCode == 404}" class="info-section" style="background: #f0f7ff; border-left-color: #2196F3; color: #0c5aa0;">
-			<strong>❌ Error 404 - Página no encontrada</strong>
-			<p style="margin-top: 8px;">La URL que intentaste acceder no existe o fue movida a otra ubicación.</p>
-		</div>
-
-		<div th:if="${statusCode == 403}" class="info-section" style="background: #fff5f5; border-left-color: #f56565; color: #742a2a;">
-			<strong>🔒 Error 403 - Acceso Prohibido</strong>
-			<p style="margin-top: 8px;">No tienes permisos para acceder a este recurso. Asegúrate de estar autenticado con las credenciales correctas.</p>
-		</div>
-
-		<div th:if="${statusCode == 401}" class="info-section" style="background: #fff5f5; border-left-color: #f56565; color: #742a2a;">
-			<strong>🔐 Error 401 - No Autorizado</strong>
-			<p style="margin-top: 8px;">Debes iniciar sesión para acceder a este recurso. Por favor, proporciona credenciales válidas.</p>
-		</div>
-
-		<div th:if="${statusCode == 500}" class="info-section" style="background: #fff5f5; border-left-color: #f56565; color: #742a2a;">
-			<strong>⚠️ Error 500 - Error Interno del Servidor</strong>
-			<p style="margin-top: 8px;">Ocurrió un error inesperado en el servidor. El equipo de administración ha sido notificado y está trabajando para solucionarlo.</p>
-		</div>
-
-		<div th:if="${statusCode == 503}" class="info-section" style="background: #fff5f5; border-left-color: #f56565; color: #742a2a;">
-			<strong>🔧 Error 503 - Servicio no disponible</strong>
-			<p style="margin-top: 8px;">El servidor está temporalmente bajo mantenimiento o sobrecargado. Intenta nuevamente en unos momentos.</p>
+		<div class="documentation-link">
+			<strong style="display: block; margin-bottom: 10px;">📖 Enlaces útiles:</strong>
+			<a href="/" style="display: inline-block;">Inicio</a>
+			<a href="/swagger-ui.html" target="_blank" style="display: inline-block;">Swagger UI</a>
+			<a href="/README.md" target="_blank" style="display: inline-block;">Documentación</a>
 		</div>
 	</div>
 </body>
