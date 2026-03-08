@@ -212,6 +212,14 @@
             background: #c82333;
         }
         
+        button.btn-secondary {
+            background: var(--secondary-color);
+        }
+        
+        button.btn-secondary:hover {
+            background: #5a6268;
+        }
+        
         .response-box {
             background: var(--light-color);
             border-left: 4px solid var(--primary-color);
@@ -283,6 +291,64 @@
             color: #856404;
             margin-bottom: 20px;
         }
+
+        .data-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+            background: white;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+            border-radius: var(--border-radius);
+            overflow: hidden;
+            display: none; /* starts hidden */
+        }
+        
+        .data-table.show {
+            display: table;
+            animation: fadeIn 0.3s ease-in;
+        }
+
+        .data-table th, .data-table td {
+            text-align: left;
+            padding: 12px 15px;
+        }
+
+        .data-table th {
+            background-color: var(--primary-color);
+            color: white;
+            font-weight: 600;
+            border-bottom: 2px solid #0056b3;
+        }
+
+        .data-table tr {
+            border-bottom: 1px solid #ddd;
+        }
+
+        .data-table tr:nth-of-type(even) {
+            background-color: #f3f3f3;
+        }
+
+        .data-table tr:last-of-type {
+            border-bottom: 2px solid var(--primary-color);
+        }
+        
+        .data-table td.actions {
+            white-space: nowrap;
+            width: 1%;
+        }
+
+        .action-btn {
+            background: none;
+            border: none;
+            padding: 5px 10px;
+            margin: 0 2px;
+            color: white;
+            border-radius: 4px;
+            font-size: 0.85rem;
+        }
+        
+        .action-btn.edit { background: var(--warning-color); color: #000; }
+        .action-btn.del { background: var(--danger-color); }
         
         .footer {
             background: var(--light-color);
@@ -358,6 +424,10 @@
                 padding: 10px 15px;
                 font-size: 0.9rem;
             }
+
+            .data-table th, .data-table td {
+                padding: 8px 10px;
+            }
         }
     </style>
 </head>
@@ -365,136 +435,128 @@
     <div class="container">
         <div class="header">
             <h1>🖨️ Sistema Impresora</h1>
-            <p>Panel de Control - API REST Completo</p>
+            <p>Panel de Administración H2</p>
         </div>
         
         <div class="content">
             <div class="info-box">
-                ℹ️ Esta interfaz web comunica directamente con los endpoints RESTful en <strong>/api/</strong>
+                ℹ️ Esta interfaz web comunica de forma directa con tu Embedded H2 Server utilizando los conectores JPA en <strong>/api/registros</strong> y <strong>/api/imagenes</strong>
             </div>
             
             <!-- Navigation Tabs -->
             <div class="nav-tabs">
-                <button class="active" onclick="mostrarSeccion('validacion')">✓ Validación</button>
-                <button onclick="mostrarSeccion('get')">📥 GET</button>
-                <button onclick="mostrarSeccion('post')">📤 POST</button>
-                <button onclick="mostrarSeccion('put')">🔄 PUT</button>
-                <button onclick="mostrarSeccion('delete')">🗑️ DELETE</button>
-                <button onclick="mostrarSeccion('info')">ℹ️ Información</button>
+                <button class="active" onclick="mostrarSeccion('registros')">📝 Módulo Registros</button>
+                <button onclick="mostrarSeccion('imagenes')">🖼️ Módulo Imágenes</button>
+                <button onclick="mostrarSeccion('info')">ℹ️ Base de Datos e Info</button>
             </div>
             
-            <!-- Sección Validación -->
-            <div id="validacion" class="section active">
-                <h2>✓ Validación del Sistema</h2>
-                <p>Valida el estado actual del servidor y obtiene información de la aplicación.</p>
-                <div class="button-group">
-                    <button class="btn-success" onclick="validarSistema()">Validar Estado</button>
-                    <button class="btn-success" onclick="obtenerInfo()">Obtener Información</button>
-                </div>
-                <div id="responseValidar" class="response-box"></div>
-            </div>
-            
-            <!-- Sección GET -->
-            <div id="get" class="section">
-                <h2>📥 Consultar Datos (GET)</h2>
-                <p>Obtiene datos de un recurso específico mediante su ID.</p>
-                <div class="form-group">
-                    <div class="form-item">
-                        <label for="pathGet">Path:</label>
-                        <input type="text" id="pathGet" placeholder="ej: usuario, documento, registro" value="usuario">
-                    </div>
-                    <div class="form-item">
-                        <label for="idGet">ID:</label>
-                        <input type="text" id="idGet" placeholder="ej: 123, abc, 001" value="001">
-                    </div>
-                </div>
-                <div class="button-group">
-                    <button class="btn-success" onclick="obtenerDatos()">📥 GET</button>
-                </div>
-                <div id="responseGet" class="response-box"></div>
-            </div>
-            
-            <!-- Sección POST -->
-            <div id="post" class="section">
-                <h2>📤 Procesar/Crear Datos (POST)</h2>
-                <p>Envía datos al servidor para procesar o crear nuevos registros.</p>
-                <div class="form-group">
-                    <div class="form-item">
-                        <label for="pathPost">Path:</label>
-                        <input type="text" id="pathPost" placeholder="ej: usuario, documento" value="usuario">
-                    </div>
-                    <div class="form-item">
-                        <label for="idPost">ID:</label>
-                        <input type="text" id="idPost" placeholder="ej: 123, 001" value="001">
-                    </div>
-                </div>
-                <label for="bodyPost">Datos JSON:</label>
-                <textarea id="bodyPost">{
-  "nombre": "Juan Pérez",
-  "edad": 30,
-  "email": "juan@example.com",
-  "departamento": "Tecnología"
-}</textarea>
-                <div class="button-group">
-                    <button class="btn-success" onclick="procesarDatos()">📤 POST</button>
-                </div>
-                <div id="responsePost" class="response-box"></div>
-            </div>
-            
-            <!-- Sección PUT -->
-            <div id="put" class="section">
-                <h2>🔄 Actualizar Datos (PUT)</h2>
-                <p>Modifica los datos de un recurso existente.</p>
-                <div class="form-group">
-                    <div class="form-item">
-                        <label for="pathPut">Path:</label>
-                        <input type="text" id="pathPut" placeholder="ej: usuario, documento" value="usuario">
-                    </div>
-                    <div class="form-item">
-                        <label for="idPut">ID:</label>
-                        <input type="text" id="idPut" placeholder="ej: 123, 001" value="001">
-                    </div>
-                </div>
-                <label for="bodyPut">Datos JSON:</label>
-                <textarea id="bodyPut">{
-  "nombre": "Juan Carlos Pérez",
-  "edad": 31,
-  "email": "jcarlos@example.com"
-}</textarea>
-                <div class="button-group">
-                    <button class="btn-success" onclick="actualizarDatos()">🔄 PUT</button>
-                </div>
-                <div id="responsePut" class="response-box"></div>
-            </div>
-            
-            <!-- Sección DELETE -->
-            <div id="delete" class="section">
-                <h2>🗑️ Eliminar Datos (DELETE)</h2>
-                <p>Elimina un recurso existente del servidor.</p>
-                <div class="warning-box">
-                    ⚠️ Esta operación es destructiva y no se puede deshacer.
-                </div>
-                <div class="form-group">
-                    <div class="form-item">
-                        <label for="pathDelete">Path:</label>
-                        <input type="text" id="pathDelete" placeholder="ej: usuario, documento" value="usuario">
-                    </div>
-                    <div class="form-item">
-                        <label for="idDelete">ID:</label>
-                        <input type="text" id="idDelete" placeholder="ej: 123, 001" value="001">
-                    </div>
-                </div>
-                <div class="button-group">
-                    <button class="btn-danger" onclick="eliminarDatos()">🗑️ DELETE</button>
-                </div>
-                <div id="responseDelete" class="response-box"></div>
-            </div>
-            
-            <!-- Sección Información -->
-            <div id="info" class="section">
-                <h2>ℹ️ Información del Sistema</h2>
+            <!-- ========================= -->
+            <!--   SECCIÓN REGISTROS       -->
+            <!-- ========================= -->
+            <div id="registros" class="section active">
+                <h2>📝 Gestión de Registros</h2>
+                
                 <div class="credentials-section">
-                    <h3>🔐 Credenciales por Defecto</h3>
+                    <h3>➕ Crear / Editar Registro</h3>
+                    <input type="hidden" id="regId">
+                    <div class="form-group">
+                        <div class="form-item">
+                            <label for="regPath">Path en Servidor:</label>
+                            <input type="text" id="regPath" placeholder="ej: /tmp/documento.pdf">
+                        </div>
+                        <div class="form-item">
+                            <label for="regUsuario">ID de Usuario Creador:</label>
+                            <input type="text" id="regUsuario" placeholder="ej: user-1456">
+                        </div>
+                    </div>
+                    <div class="button-group" style="margin-top: 5px;">
+                        <button class="btn-success" id="btnGuardarRegistro" onclick="guardarRegistro()">✅ Guardar Registro</button>
+                        <button class="btn-secondary" onclick="limpiarFormularioRegistro()">❄️ Limpiar</button>
+                    </div>
+                </div>
+
+                <div class="button-group">
+                    <button onclick="listarRegistros()">🔄 Cargar todos los Registros</button>
+                </div>
+                
+                <table id="tablaRegistros" class="data-table">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Path Local</th>
+                            <th>Usuario</th>
+                            <th class="actions">Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <!-- Datos dinámicos -->
+                    </tbody>
+                </table>
+                <div id="responseRegistros" class="response-box"></div>
+            </div>
+            
+            <!-- ========================= -->
+            <!--     SECCIÓN IMÁGENES      -->
+            <!-- ========================= -->
+            <div id="imagenes" class="section">
+                <h2>🖼️ Gestión de Imágenes Base64</h2>
+                
+                <div class="credentials-section">
+                    <h3>➕ Crear / Editar Imagen</h3>
+                    <input type="hidden" id="imgId">
+                    <div class="form-group">
+                        <div class="form-item" style="grid-column: 1 / -1;">
+                            <label for="imgNombre">Nombre de Archivo:</label>
+                            <input type="text" id="imgNombre" placeholder="ej: logo_empresa.png">
+                        </div>
+                        <div class="form-item" style="grid-column: 1 / -1;">
+                            <label for="imgBase64">Cadena Base64:</label>
+                            <textarea id="imgBase64" placeholder="JVBERi0xLjQKJcOkw7zDtsOfCjIgMCB..."></textarea>
+                        </div>
+                    </div>
+                    <div class="button-group" style="margin-top: 5px;">
+                        <button class="btn-success" id="btnGuardarImagen" onclick="guardarImagen()">✅ Guardar Imagen</button>
+                        <button class="btn-secondary" onclick="limpiarFormularioImagen()">❄️ Limpiar</button>
+                    </div>
+                </div>
+
+                <div class="button-group">
+                    <button onclick="listarImagenes()">🔄 Cargar todas las Imágenes</button>
+                </div>
+                
+                <table id="tablaImagenes" class="data-table">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Nombre Archivo</th>
+                            <th>Fragmento Base64</th>
+                            <th class="actions">Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <!-- Datos dinámicos -->
+                    </tbody>
+                </table>
+                <div id="responseImagenes" class="response-box"></div>
+            </div>
+
+            <!-- ========================= -->
+            <!--     SECCIÓN INFORMACIÓN   -->
+            <!-- ========================= -->
+            <div id="info" class="section">
+                <h2>ℹ️ Información del Sistema y Debugging</h2>
+                <div class="credentials-section">
+                    <h3>🗄️ Consola Web H2</h3>
+                    <p>La base de datos relacional opera directamente en memoria.</p>
+                    <div class="button-group">
+                        <a href="/h2-console" target="_blank" style="text-decoration: none;">
+                            <button class="btn-primary">🗄️ Abrir Consola H2 en Nueva Pestaña</button>
+                        </a>
+                    </div>
+                </div>
+
+                <div class="credentials-section">
+                    <h3>🔐 Autenticación Global (Spring Security Basic Auth)</h3>
                     <div class="credential-item">
                         <strong>Usuario:</strong>
                         <code>ggigeroa</code>
@@ -506,28 +568,16 @@
                 </div>
                 
                 <div class="credentials-section">
-                    <h3>📚 Documentación</h3>
+                    <h3>📚 APIs Exportadas</h3>
                     <ul style="margin-left: 20px; line-height: 2;">
-                        <li><strong>Swagger UI:</strong> <code>/swagger-ui.html</code></li>
-                        <li><strong>OpenAPI JSON:</strong> <code>/v3/api-docs</code></li>
-                        <li><strong>Health Check:</strong> <code>GET /api/</code></li>
-                    </ul>
-                </div>
-                
-                <div class="credentials-section">
-                    <h3>🛠️ Tecnologías</h3>
-                    <ul style="margin-left: 20px; line-height: 2;">
-                        <li>Java 17</li>
-                        <li>Spring Boot 3.5.10</li>
-                        <li>Spring Web & Spring Security</li>
-                        <li>Spring Data JPA (opcional)</li>
-                        <li>MySQL 5.7+ (opcional)</li>
-                        <li>Swagger UI / OpenAPI 2.x</li>
+                        <li><strong>Registros API:</strong> <code>GET / POST / PUT / DELETE ~ /api/registros</code></li>
+                        <li><strong>Imágenes API:</strong> <code>GET / POST / PUT / DELETE ~ /api/imagenes</code></li>
+                        <li><strong>Swagger UI:</strong> <code><a href="/swagger-ui.html" target="_blank">/swagger-ui.html</a></code></li>
                     </ul>
                 </div>
                 
                 <div class="info-box" style="margin-top: 20px;">
-                    Para más información, consulta el archivo <strong>README.md</strong> en el repositorio.
+                    Para más información, consulta el archivo <strong>README.md</strong> en la raíz del backend.
                 </div>
             </div>
         </div>
@@ -538,134 +588,225 @@
     </div>
     
     <script>
+        // Inject auth automatically on front-end for our local dev convenience
+        const authToken = "Basic " + btoa("ggigeroa:admin");
+
+        // UI Logic
         function mostrarSeccion(seccionId) {
-            // Ocultar todas las secciones
-            const secciones = document.querySelectorAll('.section');
-            secciones.forEach(s => s.classList.remove('active'));
-            
-            // Mostrar la sección seleccionada
+            document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
             document.getElementById(seccionId).classList.add('active');
             
-            // Actualizar botones activos
-            const botones = document.querySelectorAll('.nav-tabs button');
-            botones.forEach(b => b.classList.remove('active'));
+            document.querySelectorAll('.nav-tabs button').forEach(b => b.classList.remove('active'));
             event.target.classList.add('active');
         }
         
-        function mostrarRespuesta(elementId, data, esError = false) {
-            const elemento = document.getElementById(elementId);
-            elemento.classList.add('show');
+        function mostrarRespuestaRapida(elementId, data, isError) {
+            const elm = document.getElementById(elementId);
+            elm.classList.add('show');
+            let html = isError ? 
+                '<div class="status-badge status-error">❌ Operación Falló</div>' : 
+                '<div class="status-badge status-success">✓ Operación Exitosa</div>';
             
-            let html = '';
-            if (esError) {
-                html += '<div class="status-badge status-error">❌ Error</div>';
-            } else {
-                html += '<div class="status-badge status-success">✓ Éxito</div>';
-            }
-            
-            html += '<pre>' + JSON.stringify(data, null, 2) + '</pre>';
-            elemento.innerHTML = html;
+            if(data) html += '<pre>' + JSON.stringify(data, null, 2) + '</pre>';
+            elm.innerHTML = html;
         }
-        
-        function realizarFetch(url, metodo, datos = null) {
-            const opciones = {
-                method: metodo,
+
+        // Generic API Caller
+        async function apiRequest(url, method = 'GET', bodyObj = null) {
+            const options = {
+                method: method,
                 headers: {
-                    'Content-Type': 'application/json'
+                    'Content-Type': 'application/json',
+                    'Authorization': authToken
                 }
             };
-            
-            if (datos) {
-                opciones.body = JSON.stringify(datos);
-            }
-            
-            return fetch(url, opciones)
-                .then(response => response.json())
-                .catch(error => {
-                    console.error('Error:', error);
-                    return { error: error.message, tipo: 'Error de Conexión' };
-                });
-        }
-        
-        function validarSistema() {
-            realizarFetch('/api/validar', 'GET')
-                .then(data => mostrarRespuesta('responseValidar', data, !data || data.error));
-        }
-        
-        function obtenerInfo() {
-            realizarFetch('/api/', 'GET')
-                .then(data => mostrarRespuesta('responseValidar', data, !data || data.error));
-        }
-        
-        function obtenerDatos() {
-            const path = document.getElementById('pathGet').value || 'usuario';
-            const id = document.getElementById('idGet').value || '001';
-            
-            if (!path || !id) {
-                mostrarRespuesta('responseGet', { error: 'Path e ID son requeridos' }, true);
-                return;
-            }
-            
-            realizarFetch(`/api/${path}/${id}`, 'GET')
-                .then(data => mostrarRespuesta('responseGet', data, !data || data.error));
-        }
-        
-        function procesarDatos() {
-            const path = document.getElementById('pathPost').value || 'usuario';
-            const id = document.getElementById('idPost').value || '001';
-            const bodyText = document.getElementById('bodyPost').value;
-            
-            if (!path || !id || !bodyText) {
-                mostrarRespuesta('responsePost', { error: 'Todos los campos son requeridos' }, true);
-                return;
-            }
-            
+            if (bodyObj) options.body = JSON.stringify(bodyObj);
+
             try {
-                const datos = JSON.parse(bodyText);
-                realizarFetch(`/api/${path}/${id}`, 'POST', datos)
-                    .then(data => mostrarRespuesta('responsePost', data, !data || data.error));
-            } catch (e) {
-                mostrarRespuesta('responsePost', { error: 'JSON inválido: ' + e.message }, true);
+                const response = await fetch(url, options);
+                
+                // No content scenarios (like DELETE)
+                if (response.status === 204) return { success: true };
+                
+                const data = await response.json();
+                if (!response.ok) throw new Error(data.message || 'Error en servidor');
+                
+                return { success: true, data };
+            } catch (error) {
+                console.error("API Fetch Error:", error);
+                return { success: false, error: error.message };
             }
         }
-        
-        function actualizarDatos() {
-            const path = document.getElementById('pathPut').value || 'usuario';
-            const id = document.getElementById('idPut').value || '001';
-            const bodyText = document.getElementById('bodyPut').value;
-            
-            if (!path || !id || !bodyText) {
-                mostrarRespuesta('responsePut', { error: 'Todos los campos son requeridos' }, true);
-                return;
-            }
-            
-            try {
-                const datos = JSON.parse(bodyText);
-                realizarFetch(`/api/${path}/${id}`, 'PUT', datos)
-                    .then(data => mostrarRespuesta('responsePut', data, !data || data.error));
-            } catch (e) {
-                mostrarRespuesta('responsePut', { error: 'JSON inválido: ' + e.message }, true);
+
+
+        // ==========================================
+        //  CONTROLADORES: REGISTROS
+        // ==========================================
+        function limpiarFormularioRegistro() {
+            document.getElementById('regId').value = '';
+            document.getElementById('regPath').value = '';
+            document.getElementById('regUsuario').value = '';
+            document.getElementById('btnGuardarRegistro').innerText = '✅ Crear Registro';
+        }
+
+        async function listarRegistros() {
+            const res = await apiRequest('/api/registros');
+            if(res.success) {
+                const tbody = document.querySelector('#tablaRegistros tbody');
+                tbody.innerHTML = '';
+                
+                if(res.data.length === 0) {
+                    tbody.innerHTML = '<tr><td colspan="4">No hay registros almacenados.</td></tr>';
+                } else {
+                    res.data.forEach(reg => {
+                        const tr = document.createElement('tr');
+                        tr.innerHTML = `
+                            <td>${reg.id}</td>
+                            <td>${reg.path || '-'}</td>
+                            <td>${reg.idUsuario || '-'}</td>
+                            <td class="actions">
+                                <button class="action-btn edit" onclick='editarRegistroUI(${JSON.stringify(reg)})'>Editar</button>
+                                <button class="action-btn del" onclick="eliminarRegistro(${reg.id})">Borrar</button>
+                            </td>
+                        `;
+                        tbody.appendChild(tr);
+                    });
+                }
+                document.getElementById('tablaRegistros').classList.add('show');
+                document.getElementById('responseRegistros').classList.remove('show');
+            } else {
+                mostrarRespuestaRapida('responseRegistros', res, true);
             }
         }
-        
-        function eliminarDatos() {
-            const path = document.getElementById('pathDelete').value || 'usuario';
-            const id = document.getElementById('idDelete').value || '001';
-            
-            if (!path || !id) {
-                mostrarRespuesta('responseDelete', { error: 'Path e ID son requeridos' }, true);
-                return;
-            }
-            
-            if (confirm(`¿Estás seguro de que deseas eliminar ${path}/${id}?\n\nEsta acción no se puede deshacer.`)) {
-                realizarFetch(`/api/${path}/${id}`, 'DELETE')
-                    .then(data => mostrarRespuesta('responseDelete', data, !data || data.error));
+
+        function editarRegistroUI(reg) {
+            document.getElementById('regId').value = reg.id;
+            document.getElementById('regPath').value = reg.path || '';
+            document.getElementById('regUsuario').value = reg.idUsuario || '';
+            document.getElementById('btnGuardarRegistro').innerText = '🔄 Actualizar Registro';
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        async function guardarRegistro() {
+            const id = document.getElementById('regId').value;
+            const payload = {
+                path: document.getElementById('regPath').value,
+                idUsuario: document.getElementById('regUsuario').value
+            };
+
+            const isEdit = id !== '';
+            const method = isEdit ? 'PUT' : 'POST';
+            const url = isEdit ? `/api/registros/${id}` : '/api/registros';
+
+            const res = await apiRequest(url, method, payload);
+            if(res.success) {
+                limpiarFormularioRegistro();
+                mostrarRespuestaRapida('responseRegistros', res.data, false);
+                listarRegistros();
+            } else {
+                mostrarRespuestaRapida('responseRegistros', res, true);
             }
         }
-        
-        // Log al cargar
-        console.log('Panel de Control - Sistema Impresora');
-        console.log('Documentación: http://localhost:8080/swagger-ui.html');
+
+        async function eliminarRegistro(id) {
+            if(!confirm(`¿Deseas ELIMINAR el registro ID #${id}?`)) return;
+            const res = await apiRequest(`/api/registros/${id}`, 'DELETE');
+            if(res.success) {
+                listarRegistros();
+                mostrarRespuestaRapida('responseRegistros', { info: 'Registro Eliminado Exitosamente' }, false);
+            } else {
+                mostrarRespuestaRapida('responseRegistros', res, true);
+            }
+        }
+
+
+        // ==========================================
+        //  CONTROLADORES: IMÁGENES
+        // ==========================================
+        function limpiarFormularioImagen() {
+            document.getElementById('imgId').value = '';
+            document.getElementById('imgNombre').value = '';
+            document.getElementById('imgBase64').value = '';
+            document.getElementById('btnGuardarImagen').innerText = '✅ Crear Imagen';
+        }
+
+        async function listarImagenes() {
+            const res = await apiRequest('/api/imagenes');
+            if(res.success) {
+                const tbody = document.querySelector('#tablaImagenes tbody');
+                tbody.innerHTML = '';
+                
+                if(res.data.length === 0) {
+                    tbody.innerHTML = '<tr><td colspan="4">No hay imágenes almacenadas.</td></tr>';
+                } else {
+                    res.data.forEach(img => {
+                        const tr = document.createElement('tr');
+                        // Truncate Base64 for display
+                        const truncatedB64 = img.base64 && img.base64.length > 50 
+                                            ? img.base64.substring(0, 50) + '...' 
+                                            : img.base64;
+                                            
+                        tr.innerHTML = `
+                            <td>${img.id}</td>
+                            <td>${img.nombre || '-'}</td>
+                            <td><code style="font-size:11px; color:#555;">${truncatedB64 || '-'}</code></td>
+                            <td class="actions">
+                                <button class="action-btn edit" onclick='editarImagenUI(${JSON.stringify(img).replace(/'/g, "&#39;")})'>Editar</button>
+                                <button class="action-btn del" onclick="eliminarImagen(${img.id})">Borrar</button>
+                            </td>
+                        `;
+                        tbody.appendChild(tr);
+                    });
+                }
+                document.getElementById('tablaImagenes').classList.add('show');
+                document.getElementById('responseImagenes').classList.remove('show');
+            } else {
+                mostrarRespuestaRapida('responseImagenes', res, true);
+            }
+        }
+
+        function editarImagenUI(img) {
+            document.getElementById('imgId').value = img.id;
+            document.getElementById('imgNombre').value = img.nombre || '';
+            document.getElementById('imgBase64').value = img.base64 || '';
+            document.getElementById('btnGuardarImagen').innerText = '🔄 Actualizar Imagen';
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        async function guardarImagen() {
+            const id = document.getElementById('imgId').value;
+            const payload = {
+                nombre: document.getElementById('imgNombre').value,
+                base64: document.getElementById('imgBase64').value
+            };
+
+            const isEdit = id !== '';
+            const method = isEdit ? 'PUT' : 'POST';
+            const url = isEdit ? `/api/imagenes/${id}` : '/api/imagenes';
+
+            const res = await apiRequest(url, method, payload);
+            if(res.success) {
+                limpiarFormularioImagen();
+                mostrarRespuestaRapida('responseImagenes', res.data, false);
+                listarImagenes();
+            } else {
+                mostrarRespuestaRapida('responseImagenes', res, true);
+            }
+        }
+
+        async function eliminarImagen(id) {
+            if(!confirm(`¿Deseas ELIMINAR la imagen ID #${id}?`)) return;
+            const res = await apiRequest(`/api/imagenes/${id}`, 'DELETE');
+            if(res.success) {
+                listarImagenes();
+                mostrarRespuestaRapida('responseImagenes', { info: 'Imagen Eliminada Exitosamente' }, false);
+            } else {
+                mostrarRespuestaRapida('responseImagenes', res, true);
+            }
+        }
+
+        // Init load
+        console.log('✅ Panel de Impresora Cargado');
     </script>
 </body>
 </html>
