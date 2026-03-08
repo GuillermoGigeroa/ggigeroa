@@ -1,9 +1,10 @@
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
-	<meta charset="UTF-8">
-	<meta name="viewport" content="width=device-width, initial-scale=1.0">
-	<title>Panel de Control - Sistema Impresora</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Panel de Control - Sistema Impresora</title>
     <style>
         * {
             margin: 0;
@@ -22,11 +23,11 @@
             --border-radius: 8px;
             --transition: all 0.3s ease;
         }
-        
+
         html {
             scroll-behavior: smooth;
         }
-        
+
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
@@ -35,7 +36,7 @@
             line-height: 1.6;
             color: #333;
         }
-        
+
         .container {
             background: white;
             border-radius: var(--border-radius);
@@ -46,29 +47,29 @@
             padding: 0;
             overflow: hidden;
         }
-        
+
         .header {
             background: linear-gradient(135deg, var(--primary-color) 0%, #0056b3 100%);
             color: white;
             padding: 40px 20px;
             text-align: center;
         }
-        
+
         .header h1 {
             font-size: 2.5rem;
             margin-bottom: 10px;
             font-weight: 700;
         }
-        
+
         .header p {
             font-size: 1.1rem;
             opacity: 0.9;
         }
-        
+
         .content {
             padding: 40px;
         }
-        
+
         .nav-tabs {
             display: flex;
             gap: 10px;
@@ -77,7 +78,7 @@
             border-bottom: 2px solid var(--light-color);
             padding-bottom: 0;
         }
-        
+
         .nav-tabs button {
             background: none;
             border: none;
@@ -91,31 +92,38 @@
             position: relative;
             bottom: -2px;
         }
-        
+
         .nav-tabs button:hover {
             color: var(--primary-color);
         }
-        
+
         .nav-tabs button.active {
             color: var(--primary-color);
             border-bottom-color: var(--primary-color);
         }
-        
+
         .section {
             margin-bottom: 30px;
             display: none;
         }
-        
+
         .section.active {
             display: block;
             animation: fadeIn 0.3s ease-in;
         }
-        
+
         @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(10px); }
-            to { opacity: 1; transform: translateY(0); }
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
         }
-        
+
         .section h2 {
             color: var(--primary-color);
             font-size: 1.8rem;
@@ -123,27 +131,29 @@
             border-bottom: 2px solid var(--light-color);
             padding-bottom: 10px;
         }
-        
+
         .form-group {
             margin-bottom: 20px;
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
             gap: 15px;
         }
-        
+
         .form-item {
             display: flex;
             flex-direction: column;
         }
-        
+
         label {
             font-weight: 600;
             color: var(--dark-color);
             margin-bottom: 8px;
             font-size: 0.95rem;
         }
-        
-        input, textarea, select {
+
+        input,
+        textarea,
+        select {
             padding: 12px;
             border: 1px solid #ddd;
             border-radius: var(--border-radius);
@@ -151,13 +161,15 @@
             font-family: inherit;
             transition: var(--transition);
         }
-        
-        input:focus, textarea:focus, select:focus {
+
+        input:focus,
+        textarea:focus,
+        select:focus {
             outline: none;
             border-color: var(--primary-color);
             box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.1);
         }
-        
+
         textarea {
             resize: vertical;
             min-height: 120px;
@@ -165,14 +177,14 @@
             font-family: 'Courier New', monospace;
             font-size: 0.9rem;
         }
-        
+
         .button-group {
             display: flex;
             gap: 10px;
             flex-wrap: wrap;
             margin-top: 20px;
         }
-        
+
         button {
             background: var(--primary-color);
             color: white;
@@ -185,41 +197,41 @@
             transition: var(--transition);
             white-space: nowrap;
         }
-        
+
         button:hover {
             background: #0056b3;
             transform: translateY(-2px);
             box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
         }
-        
+
         button:active {
             transform: translateY(0);
         }
-        
+
         button.btn-success {
             background: var(--success-color);
         }
-        
+
         button.btn-success:hover {
             background: #218838;
         }
-        
+
         button.btn-danger {
             background: var(--danger-color);
         }
-        
+
         button.btn-danger:hover {
             background: #c82333;
         }
-        
+
         button.btn-secondary {
             background: var(--secondary-color);
         }
-        
+
         button.btn-secondary:hover {
             background: #5a6268;
         }
-        
+
         .response-box {
             background: var(--light-color);
             border-left: 4px solid var(--primary-color);
@@ -230,17 +242,24 @@
             max-height: 400px;
             overflow-y: auto;
         }
-        
+
         .response-box.show {
             display: block;
             animation: slideIn 0.3s ease;
         }
-        
+
         @keyframes slideIn {
-            from { opacity: 0; max-height: 0; }
-            to { opacity: 1; max-height: 400px; }
+            from {
+                opacity: 0;
+                max-height: 0;
+            }
+
+            to {
+                opacity: 1;
+                max-height: 400px;
+            }
         }
-        
+
         .response-box pre {
             color: #333;
             font-size: 0.85rem;
@@ -252,7 +271,7 @@
             border-radius: 4px;
             border: 1px solid #ddd;
         }
-        
+
         .status-badge {
             display: inline-block;
             padding: 8px 12px;
@@ -261,17 +280,17 @@
             font-weight: 600;
             margin-bottom: 10px;
         }
-        
+
         .status-success {
             background: #d4edda;
             color: #155724;
         }
-        
+
         .status-error {
             background: #f8d7da;
             color: #721c24;
         }
-        
+
         .info-box {
             background: #e7f3ff;
             border-left: 4px solid var(--primary-color);
@@ -281,7 +300,7 @@
             color: #0c5aa0;
             margin-bottom: 20px;
         }
-        
+
         .warning-box {
             background: #fff3cd;
             border-left: 4px solid var(--warning-color);
@@ -297,18 +316,20 @@
             border-collapse: collapse;
             margin-top: 20px;
             background: white;
-            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
             border-radius: var(--border-radius);
             overflow: hidden;
-            display: none; /* starts hidden */
+            display: none;
+            /* starts hidden */
         }
-        
+
         .data-table.show {
             display: table;
             animation: fadeIn 0.3s ease-in;
         }
 
-        .data-table th, .data-table td {
+        .data-table th,
+        .data-table td {
             text-align: left;
             padding: 12px 15px;
         }
@@ -331,7 +352,7 @@
         .data-table tr:last-of-type {
             border-bottom: 2px solid var(--primary-color);
         }
-        
+
         .data-table td.actions {
             white-space: nowrap;
             width: 1%;
@@ -346,10 +367,16 @@
             border-radius: 4px;
             font-size: 0.85rem;
         }
-        
-        .action-btn.edit { background: var(--warning-color); color: #000; }
-        .action-btn.del { background: var(--danger-color); }
-        
+
+        .action-btn.edit {
+            background: var(--warning-color);
+            color: #000;
+        }
+
+        .action-btn.del {
+            background: var(--danger-color);
+        }
+
         .footer {
             background: var(--light-color);
             padding: 20px;
@@ -357,7 +384,7 @@
             color: var(--secondary-color);
             border-top: 1px solid #ddd;
         }
-        
+
         .credentials-section {
             background: white;
             padding: 20px;
@@ -365,28 +392,28 @@
             border: 2px solid var(--light-color);
             margin-bottom: 20px;
         }
-        
+
         .credentials-section h3 {
             color: var(--primary-color);
             margin-bottom: 15px;
         }
-        
+
         .credential-item {
             display: flex;
             gap: 15px;
             padding: 10px 0;
             border-bottom: 1px solid var(--light-color);
         }
-        
+
         .credential-item:last-child {
             border-bottom: none;
         }
-        
+
         .credential-item strong {
             color: var(--dark-color);
             min-width: 120px;
         }
-        
+
         .credential-item code {
             background: var(--light-color);
             padding: 4px 8px;
@@ -394,68 +421,71 @@
             font-family: 'Courier New', monospace;
             color: var(--primary-color);
         }
-        
+
         @media (max-width: 768px) {
             .header h1 {
                 font-size: 1.8rem;
             }
-            
+
             .content {
                 padding: 20px;
             }
-            
+
             .form-group {
                 grid-template-columns: 1fr;
             }
-            
+
             .button-group {
                 flex-direction: column;
             }
-            
+
             button {
                 width: 100%;
             }
-            
+
             .nav-tabs {
                 gap: 5px;
             }
-            
+
             .nav-tabs button {
                 padding: 10px 15px;
                 font-size: 0.9rem;
             }
 
-            .data-table th, .data-table td {
+            .data-table th,
+            .data-table td {
                 padding: 8px 10px;
             }
         }
     </style>
 </head>
+
 <body>
     <div class="container">
         <div class="header">
             <h1>🖨️ Sistema Impresora</h1>
             <p>Panel de Administración H2</p>
         </div>
-        
+
         <div class="content">
             <div class="info-box">
-                ℹ️ Esta interfaz web comunica de forma directa con tu Embedded H2 Server utilizando los conectores JPA en <strong>/api/registros</strong> y <strong>/api/imagenes</strong>
+                ℹ️ Esta interfaz web comunica de forma directa con tu Embedded H2 Server utilizando los conectores JPA
+                en <strong>/api/registros</strong> y <strong>/api/imagenes</strong>
             </div>
-            
+
             <!-- Navigation Tabs -->
             <div class="nav-tabs">
                 <button class="active" onclick="mostrarSeccion('registros')">📝 Módulo Registros</button>
                 <button onclick="mostrarSeccion('imagenes')">🖼️ Módulo Imágenes</button>
                 <button onclick="mostrarSeccion('info')">ℹ️ Base de Datos e Info</button>
             </div>
-            
+
             <!-- ========================= -->
             <!--   SECCIÓN REGISTROS       -->
             <!-- ========================= -->
             <div id="registros" class="section active">
                 <h2>📝 Gestión de Registros</h2>
-                
+
                 <div class="credentials-section">
                     <h3>➕ Crear / Editar Registro</h3>
                     <input type="hidden" id="regId">
@@ -470,7 +500,8 @@
                         </div>
                     </div>
                     <div class="button-group" style="margin-top: 5px;">
-                        <button class="btn-success" id="btnGuardarRegistro" onclick="guardarRegistro()">✅ Guardar Registro</button>
+                        <button class="btn-success" id="btnGuardarRegistro" onclick="guardarRegistro()">✅ Guardar
+                            Registro</button>
                         <button class="btn-secondary" onclick="limpiarFormularioRegistro()">❄️ Limpiar</button>
                     </div>
                 </div>
@@ -478,7 +509,7 @@
                 <div class="button-group">
                     <button onclick="listarRegistros()">🔄 Cargar todos los Registros</button>
                 </div>
-                
+
                 <table id="tablaRegistros" class="data-table">
                     <thead>
                         <tr>
@@ -494,13 +525,13 @@
                 </table>
                 <div id="responseRegistros" class="response-box"></div>
             </div>
-            
+
             <!-- ========================= -->
             <!--     SECCIÓN IMÁGENES      -->
             <!-- ========================= -->
             <div id="imagenes" class="section">
                 <h2>🖼️ Gestión de Imágenes Base64</h2>
-                
+
                 <div class="credentials-section">
                     <h3>➕ Crear / Editar Imagen</h3>
                     <input type="hidden" id="imgId">
@@ -515,7 +546,8 @@
                         </div>
                     </div>
                     <div class="button-group" style="margin-top: 5px;">
-                        <button class="btn-success" id="btnGuardarImagen" onclick="guardarImagen()">✅ Guardar Imagen</button>
+                        <button class="btn-success" id="btnGuardarImagen" onclick="guardarImagen()">✅ Guardar
+                            Imagen</button>
                         <button class="btn-secondary" onclick="limpiarFormularioImagen()">❄️ Limpiar</button>
                     </div>
                 </div>
@@ -523,7 +555,7 @@
                 <div class="button-group">
                     <button onclick="listarImagenes()">🔄 Cargar todas las Imágenes</button>
                 </div>
-                
+
                 <table id="tablaImagenes" class="data-table">
                     <thead>
                         <tr>
@@ -566,27 +598,28 @@
                         <code>admin</code>
                     </div>
                 </div>
-                
+
                 <div class="credentials-section">
                     <h3>📚 APIs Exportadas</h3>
                     <ul style="margin-left: 20px; line-height: 2;">
                         <li><strong>Registros API:</strong> <code>GET / POST / PUT / DELETE ~ /api/registros</code></li>
                         <li><strong>Imágenes API:</strong> <code>GET / POST / PUT / DELETE ~ /api/imagenes</code></li>
-                        <li><strong>Swagger UI:</strong> <code><a href="/swagger-ui.html" target="_blank">/swagger-ui.html</a></code></li>
+                        <li><strong>Swagger UI:</strong>
+                            <code><a href="/swagger-ui.html" target="_blank">/swagger-ui.html</a></code></li>
                     </ul>
                 </div>
-                
+
                 <div class="info-box" style="margin-top: 20px;">
                     Para más información, consulta el archivo <strong>README.md</strong> en la raíz del backend.
                 </div>
             </div>
         </div>
-        
+
         <div class="footer">
             <p>&copy; 2026 Sistema Impresora • Desarrollado con Spring Boot</p>
         </div>
     </div>
-    
+
     <script>
         // Inject auth automatically on front-end for our local dev convenience
         const authToken = "Basic " + btoa("ggigeroa:admin");
@@ -595,19 +628,19 @@
         function mostrarSeccion(seccionId) {
             document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
             document.getElementById(seccionId).classList.add('active');
-            
+
             document.querySelectorAll('.nav-tabs button').forEach(b => b.classList.remove('active'));
             event.target.classList.add('active');
         }
-        
+
         function mostrarRespuestaRapida(elementId, data, isError) {
             const elm = document.getElementById(elementId);
             elm.classList.add('show');
-            let html = isError ? 
-                '<div class="status-badge status-error">❌ Operación Falló</div>' : 
+            let html = isError ?
+                '<div class="status-badge status-error">❌ Operación Falló</div>' :
                 '<div class="status-badge status-success">✓ Operación Exitosa</div>';
-            
-            if(data) html += '<pre>' + JSON.stringify(data, null, 2) + '</pre>';
+
+            if (data) html += '<pre>' + JSON.stringify(data, null, 2) + '</pre>';
             elm.innerHTML = html;
         }
 
@@ -624,13 +657,13 @@
 
             try {
                 const response = await fetch(url, options);
-                
+
                 // No content scenarios (like DELETE)
-                if (response.status === 204) return { success: true };
-                
+                if (response.status === 204) return { success: true, data: null };
+
                 const data = await response.json();
                 if (!response.ok) throw new Error(data.message || 'Error en servidor');
-                
+
                 return { success: true, data };
             } catch (error) {
                 console.error("API Fetch Error:", error);
@@ -651,11 +684,11 @@
 
         async function listarRegistros() {
             const res = await apiRequest('/api/registros');
-            if(res.success) {
+            if (res.success) {
                 const tbody = document.querySelector('#tablaRegistros tbody');
                 tbody.innerHTML = '';
-                
-                if(res.data.length === 0) {
+
+                if (res.data.length === 0) {
                     tbody.innerHTML = '<tr><td colspan="4">No hay registros almacenados.</td></tr>';
                 } else {
                     res.data.forEach(reg => {
@@ -699,7 +732,7 @@
             const url = isEdit ? `/api/registros/${id}` : '/api/registros';
 
             const res = await apiRequest(url, method, payload);
-            if(res.success) {
+            if (res.success) {
                 limpiarFormularioRegistro();
                 mostrarRespuestaRapida('responseRegistros', res.data, false);
                 listarRegistros();
@@ -709,9 +742,9 @@
         }
 
         async function eliminarRegistro(id) {
-            if(!confirm(`¿Deseas ELIMINAR el registro ID #${id}?`)) return;
+            if (!confirm(`¿Deseas ELIMINAR el registro ID #${id}?`)) return;
             const res = await apiRequest(`/api/registros/${id}`, 'DELETE');
-            if(res.success) {
+            if (res.success) {
                 listarRegistros();
                 mostrarRespuestaRapida('responseRegistros', { info: 'Registro Eliminado Exitosamente' }, false);
             } else {
@@ -732,20 +765,20 @@
 
         async function listarImagenes() {
             const res = await apiRequest('/api/imagenes');
-            if(res.success) {
+            if (res.success) {
                 const tbody = document.querySelector('#tablaImagenes tbody');
                 tbody.innerHTML = '';
-                
-                if(res.data.length === 0) {
+
+                if (res.data.length === 0) {
                     tbody.innerHTML = '<tr><td colspan="4">No hay imágenes almacenadas.</td></tr>';
                 } else {
                     res.data.forEach(img => {
                         const tr = document.createElement('tr');
                         // Truncate Base64 for display
-                        const truncatedB64 = img.base64 && img.base64.length > 50 
-                                            ? img.base64.substring(0, 50) + '...' 
-                                            : img.base64;
-                                            
+                        const truncatedB64 = img.base64 && img.base64.length > 50
+                            ? img.base64.substring(0, 50) + '...'
+                            : img.base64;
+
                         tr.innerHTML = `
                             <td>${img.id}</td>
                             <td>${img.nombre || '-'}</td>
@@ -785,7 +818,7 @@
             const url = isEdit ? `/api/imagenes/${id}` : '/api/imagenes';
 
             const res = await apiRequest(url, method, payload);
-            if(res.success) {
+            if (res.success) {
                 limpiarFormularioImagen();
                 mostrarRespuestaRapida('responseImagenes', res.data, false);
                 listarImagenes();
@@ -795,9 +828,9 @@
         }
 
         async function eliminarImagen(id) {
-            if(!confirm(`¿Deseas ELIMINAR la imagen ID #${id}?`)) return;
+            if (!confirm(`¿Deseas ELIMINAR la imagen ID #${id}?`)) return;
             const res = await apiRequest(`/api/imagenes/${id}`, 'DELETE');
-            if(res.success) {
+            if (res.success) {
                 listarImagenes();
                 mostrarRespuestaRapida('responseImagenes', { info: 'Imagen Eliminada Exitosamente' }, false);
             } else {
@@ -809,4 +842,5 @@
         console.log('✅ Panel de Impresora Cargado');
     </script>
 </body>
+
 </html>
