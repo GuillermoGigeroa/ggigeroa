@@ -2,7 +2,6 @@ package ggigeroa.impresora.runner.controller;
 
 import java.util.List;
 import java.util.Optional;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,12 +16,10 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.security.access.prepost.PreAuthorize;
-
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
-
 import ggigeroa.impresora.runner.impl.RegistroRepository;
 import ggigeroa.impresora.runner.model.Registro;
 
@@ -62,7 +59,7 @@ public class RegistroController {
     @PreAuthorize("hasRole('ADMIN')")
     @PostMapping
     public ResponseEntity<Registro> crear(
-            @Parameter(description = "Objeto Registro conteniendo el path y usuario", required = true) @RequestBody Registro registro) {
+            @Parameter(description = "Objeto Registro conteniendo el nombre y usuario", required = true) @RequestBody Registro registro) {
         logger.info("POST /api/registros - Creando nuevo registro");
         try {
             Registro nuevoRegistro = registroRepository.save(registro);
@@ -73,7 +70,7 @@ public class RegistroController {
         }
     }
 
-    @Operation(summary = "Actualizar un registro existente", description = "Modifica los datos (path y usuario) de un registro ya existente mediante su ID.")
+    @Operation(summary = "Actualizar un registro existente", description = "Modifica los datos (nombre y usuario) de un registro ya existente mediante su ID.")
     @ApiResponse(responseCode = "200", description = "Registro actualizado exitosamente")
     @ApiResponse(responseCode = "404", description = "El registro a actualizar no existe")
     @ApiResponse(responseCode = "500", description = "Error interno al actualizar el registro")
@@ -87,7 +84,7 @@ public class RegistroController {
 
         if (registroExistente.isPresent()) {
             Registro registro = registroExistente.get();
-            registro.setPath(datosNuevos.getPath());
+            registro.setNombre(datosNuevos.getNombre());
             registro.setIdUsuario(datosNuevos.getIdUsuario());
 
             try {
