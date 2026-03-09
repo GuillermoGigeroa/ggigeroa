@@ -2,6 +2,7 @@ package ggigeroa.impresora.runner.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
@@ -19,6 +20,7 @@ import org.springframework.security.web.SecurityFilterChain;
  */
 @Configuration
 @EnableWebSecurity
+@EnableMethodSecurity
 public class SecurityConfig {
 
 	/**
@@ -26,13 +28,25 @@ public class SecurityConfig {
 	 */
 	@Bean
 	public UserDetailsService userDetailsService(PasswordEncoder encoder) {
-		UserDetails user = User.builder()
+		UserDetails admin_ggigeroa = User.builder()
 				.username("ggigeroa")
 				.password(encoder.encode("admin"))
+				.roles("ADMIN")
+				.build();
+
+		UserDetails user_leandro = User.builder()
+				.username("leandro")
+				.password(encoder.encode("leandro"))
+				.roles("USER")
+				.build();
+
+		UserDetails _dev = User.builder()
+				.username("_")
+				.password(encoder.encode("_"))
 				.roles("USER", "ADMIN")
 				.build();
 
-		return new InMemoryUserDetailsManager(user);
+		return new InMemoryUserDetailsManager(admin_ggigeroa, user_leandro, _dev);
 	}
 
 	/**

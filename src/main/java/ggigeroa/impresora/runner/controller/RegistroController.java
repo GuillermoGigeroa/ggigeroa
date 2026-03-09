@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.security.access.prepost.PreAuthorize;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -58,6 +59,7 @@ public class RegistroController {
     @Operation(summary = "Crear un nuevo registro", description = "Almacena la información de un nuevo registro en la base de datos.")
     @ApiResponse(responseCode = "201", description = "Registro creado exitosamente")
     @ApiResponse(responseCode = "500", description = "Error interno al crear el registro")
+    @PreAuthorize("hasRole('ADMIN')")
     @PostMapping
     public ResponseEntity<Registro> crear(
             @Parameter(description = "Objeto Registro conteniendo el path y usuario", required = true) @RequestBody Registro registro) {
@@ -75,6 +77,7 @@ public class RegistroController {
     @ApiResponse(responseCode = "200", description = "Registro actualizado exitosamente")
     @ApiResponse(responseCode = "404", description = "El registro a actualizar no existe")
     @ApiResponse(responseCode = "500", description = "Error interno al actualizar el registro")
+    @PreAuthorize("hasRole('ADMIN')")
     @PutMapping("/{id}")
     public ResponseEntity<Registro> actualizar(
             @Parameter(description = "ID del registro a actualizar", required = true) @PathVariable Long id,
@@ -102,6 +105,7 @@ public class RegistroController {
     @Operation(summary = "Eliminar un registro", description = "Borra físicamente un registro de la base de datos utilizando su ID.")
     @ApiResponse(responseCode = "204", description = "Registro eliminado exitosamente (Sin contenido)")
     @ApiResponse(responseCode = "404", description = "El registro a borrar no existe")
+    @PreAuthorize("hasRole('ADMIN')")
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> eliminar(
             @Parameter(description = "ID del registro a eliminar", required = true) @PathVariable Long id) {
