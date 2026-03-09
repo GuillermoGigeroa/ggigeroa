@@ -20,7 +20,6 @@ Aplicación Spring Boot 3.5.10 que demuestra patrones de desarrollo profesional 
 
 - Java 17+
 - Maven 3.8+ (incluido: `mvnw`)
-- MySQL 5.7+ (opcional)
 
 ### Compilar
 
@@ -40,28 +39,36 @@ java -jar target/impresora.ggigeroa-0.0.1-SNAPSHOT.jar
 
 La aplicación se levanta en `http://localhost:8080`
 
-## 🔐 Autenticación
+## 🔐 Autenticación y Base de Datos
 
-Credenciales por defecto (desarrollo):
+La aplicación utiliza seguridad web y base de datos incrustada H2:
+- **Usuario Web:** `ggigeroa`
+- **Contraseña:** `admin`
+
+### Consola de Base de Datos H2
+- **URL:** `http://localhost:8080/h2-console`
+- **JDBC URL:** `jdbc:h2:mem:impresora_db`
+- **Nombre de Usuario:** `sa`
+- **Contraseña:** *(vacía)*
+
+> ⚠️ **Para producción:** Cambiar a OAuth2/JWT y reemplazar H2 por MySQL en `application.properties`.
+
+## 📖 Documentación Endpoints
+
+- **Registros:** `/api/registros`
+- **Imágenes:** `/api/imagenes`
+- **Frontend Dashboard:** `http://localhost:8080/`
+
+Ejemplo de uso de API (cURL):
+```bash
+curl -u ggigeroa:admin -X GET http://localhost:8080/api/registros
 ```
-Usuario: ggigeroa
-Contraseña: admin
-```
-
-> ⚠️ **Para producción:** Cambiar a OAuth2/JWT y usar variables de entorno.
-
-## 📖 Documentación
-
-- **Swagger UI:** `http://localhost:8080/swagger-ui.html`
-- **OpenAPI JSON:** `http://localhost:8080/v3/api-docs`
-- **Health Check:** `curl -u leandro:impresora123 http://localhost:8080/api/`
 
 ## 📂 Estructura
 
 - `src/main/java/` - Código fuente
 - `src/main/resources/` - Configuración
-- `docs/` - Documentación (GitHub Pages)
-- `agent.md` - Contexto técnico
+- `agent.md` - Contexto técnico (IA)
 
 ## ✨ Características
 

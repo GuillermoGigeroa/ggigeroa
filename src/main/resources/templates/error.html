@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -44,6 +45,7 @@
 				opacity: 0;
 				transform: translateY(30px);
 			}
+
 			to {
 				opacity: 1;
 				transform: translateY(0);
@@ -58,9 +60,12 @@
 		}
 
 		@keyframes pulse {
-			0%, 100% {
+
+			0%,
+			100% {
 				transform: scale(1);
 			}
+
 			50% {
 				transform: scale(1.1);
 			}
@@ -116,7 +121,8 @@
 			justify-content: center;
 		}
 
-		a, button {
+		a,
+		button {
 			padding: 12px 30px;
 			border: none;
 			border-radius: 8px;
@@ -205,7 +211,8 @@
 				flex-direction: column;
 			}
 
-			a, button {
+			a,
+			button {
 				width: 100%;
 			}
 
@@ -240,6 +247,7 @@
 		}
 	</style>
 </head>
+
 <body>
 	<div class="error-container">
 		<span class="error-icon">⚠️</span>
@@ -274,25 +282,30 @@
 
 		<div th:if="${statusCode == 403}" class="info-section error-code-info-403">
 			<strong>🔒 Error 403 - Acceso Prohibido</strong>
-			<p style="margin-top: 8px;">No tienes permisos para acceder a este recurso. Asegúrate de estar autenticado con las credenciales correctas.</p>
+			<p style="margin-top: 8px;">No tienes permisos para acceder a este recurso. Asegúrate de estar autenticado
+				con las credenciales correctas.</p>
 		</div>
 
 		<div th:if="${statusCode == 401}" class="info-section error-code-info-401">
 			<strong>🔐 Error 401 - No Autorizado</strong>
-			<p style="margin-top: 8px;">Debes iniciar sesión para acceder a este recurso. Proporciona credenciales válidas.</p>
+			<p style="margin-top: 8px;">Debes iniciar sesión para acceder a este recurso. Proporciona credenciales
+				válidas.</p>
 		</div>
 
 		<div th:if="${statusCode == 500}" class="info-section error-code-info-500">
 			<strong>⚠️ Error 500 - Error Interno del Servidor</strong>
-			<p style="margin-top: 8px;">Ocurrió un error inesperado en el servidor. El equipo de administración ha sido notificado.</p>
+			<p style="margin-top: 8px;">Ocurrió un error inesperado en el servidor. El equipo de administración ha sido
+				notificado.</p>
 		</div>
 
 		<div th:if="${statusCode == 503}" class="info-section error-code-info-503">
 			<strong>🔧 Error 503 - Servicio no disponible</strong>
-			<p style="margin-top: 8px;">El servidor está temporalmente bajo mantenimiento. Intenta nuevamente en unos momentos.</p>
+			<p style="margin-top: 8px;">El servidor está temporalmente bajo mantenimiento. Intenta nuevamente en unos
+				momentos.</p>
 		</div>
 
-		<div th:unless="${statusCode == 404 || statusCode == 403 || statusCode == 401 || statusCode == 500 || statusCode == 503}" class="info-section">
+		<div th:unless="${statusCode == 404 || statusCode == 403 || statusCode == 401 || statusCode == 500 || statusCode == 503}"
+			class="info-section">
 			<strong>ℹ️ Información del error</strong>
 			<p style="margin-top: 8px;">Se ha producido un error. Por favor, intenta nuevamente más tarde.</p>
 		</div>
@@ -309,10 +322,9 @@
 
 		<div class="documentation-link">
 			<strong style="display: block; margin-bottom: 10px;">📖 Enlaces útiles:</strong>
-			<a href="/" style="display: inline-block;">Inicio</a>
-			<a href="/swagger-ui.html" target="_blank" style="display: inline-block;">Swagger UI</a>
-			<a href="/README.md" target="_blank" style="display: inline-block;">Documentación</a>
+			<a href="/" style="display: inline-block;">🏠 Volver al Inicio</a>
 		</div>
 	</div>
 </body>
+
 </html>
