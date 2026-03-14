@@ -1,0 +1,239 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+:root {
+    --primary-color: #007bff;
+    --danger-color: #dc3545;
+    --warning-color: #ffc107;
+    --dark-color: #1a1a1a;
+}
+
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+}
+
+.error-container {
+    background: white;
+    border-radius: 10px;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+    max-width: 700px;
+    width: 100%;
+    padding: 50px;
+    text-align: center;
+    animation: slideUp 0.5s ease-out;
+}
+
+@keyframes slideUp {
+    from {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.error-icon {
+    font-size: 80px;
+    margin-bottom: 20px;
+    display: block;
+    animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+
+    0%,
+    100% {
+        transform: scale(1);
+    }
+
+    50% {
+        transform: scale(1.1);
+    }
+}
+
+.status-code {
+    font-size: 72px;
+    font-weight: 700;
+    color: var(--danger-color);
+    margin: 20px 0;
+    font-family: 'Courier New', monospace;
+}
+
+.status-text {
+    font-size: 28px;
+    color: var(--dark-color);
+    margin-bottom: 15px;
+    font-weight: 600;
+}
+
+.error-message {
+    font-size: 16px;
+    color: #666;
+    margin-bottom: 30px;
+    line-height: 1.6;
+    background: #f9f9f9;
+    padding: 15px;
+    border-radius: 8px;
+    border-left: 4px solid var(--danger-color);
+}
+
+.error-details {
+    background: #f0f0f0;
+    padding: 15px;
+    border-radius: 8px;
+    margin-bottom: 30px;
+    text-align: left;
+    font-size: 13px;
+    font-family: 'Courier New', monospace;
+    color: #555;
+    max-height: 150px;
+    overflow-y: auto;
+}
+
+.error-details p {
+    margin: 5px 0;
+}
+
+.button-group {
+    display: flex;
+    gap: 15px;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+
+a,
+button {
+    padding: 12px 30px;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 15px;
+    font-weight: 600;
+    text-decoration: none;
+    transition: all 0.3s ease;
+    display: inline-block;
+}
+
+.btn-primary {
+    background: var(--primary-color);
+    color: white;
+}
+
+.btn-primary:hover {
+    background: #0056b3;
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(0, 123, 255, 0.4);
+}
+
+.btn-secondary {
+    background: #e0e0e0;
+    color: var(--dark-color);
+}
+
+.btn-secondary:hover {
+    background: #d0d0d0;
+    transform: translateY(-2px);
+}
+
+.info-section {
+    background: #e7f3ff;
+    border-left: 4px solid var(--primary-color);
+    padding: 15px;
+    border-radius: 8px;
+    margin-top: 20px;
+    font-size: 13px;
+    color: #0c5aa0;
+}
+
+.info-section strong {
+    display: block;
+    margin-bottom: 8px;
+}
+
+.info-section ul {
+    margin-left: 20px;
+    margin-top: 10px;
+}
+
+.info-section li {
+    margin: 5px 0;
+}
+
+.error-code-info-404 {
+    background: #f0f7ff;
+    border-left-color: var(--primary-color);
+    color: #0c5aa0;
+}
+
+.error-code-info-403,
+.error-code-info-401,
+.error-code-info-500,
+.error-code-info-503 {
+    background: #fff5f5;
+    border-left-color: var(--danger-color);
+    color: #742a2a;
+}
+
+@media (max-width: 600px) {
+    .error-container {
+        padding: 30px;
+    }
+
+    .status-code {
+        font-size: 48px;
+    }
+
+    .status-text {
+        font-size: 20px;
+    }
+
+    .button-group {
+        flex-direction: column;
+    }
+
+    a,
+    button {
+        width: 100%;
+    }
+
+    .error-icon {
+        font-size: 60px;
+    }
+}
+
+.divider {
+    height: 1px;
+    background: #e0e0e0;
+    margin: 25px 0;
+}
+
+.documentation-link {
+    margin-top: 20px;
+    padding: 15px;
+    background: #f9f9f9;
+    border-radius: 8px;
+}
+
+.documentation-link a {
+    padding: 8px 16px;
+    background: var(--primary-color);
+    color: white;
+    font-size: 14px;
+    margin: 5px;
+}
+
+.documentation-link a:hover {
+    background: #0056b3;
+}

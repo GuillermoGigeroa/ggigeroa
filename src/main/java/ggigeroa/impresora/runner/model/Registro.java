@@ -9,23 +9,23 @@ import jakarta.persistence.Id;
 
 @Entity
 public class Registro {
-	
+
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
-	
-	@JsonProperty("path")
-	private String path;
-	
+
+	@JsonProperty("Nombre")
+	private String nombre;
+
 	@JsonProperty("idUsuario")
 	private String idUsuario;
-	
+
 	public Registro() {
 		super();
 	}
 
-	public Registro(String path, String idUsuario) {
-		this.path = path;
+	public Registro(String nombre, String idUsuario) {
+		this.nombre = nombre;
 		this.idUsuario = idUsuario;
 	}
 
@@ -37,12 +37,12 @@ public class Registro {
 		this.id = id;
 	}
 
-	public String getPath() {
-		return path;
+	public String getNombre() {
+		return nombre;
 	}
 
-	public void setPath(String path) {
-		this.path = path;
+	public void setNombre(String nombre) {
+		this.nombre = nombre;
 	}
 
 	public String getIdUsuario() {
@@ -55,7 +55,7 @@ public class Registro {
 
 	@Override
 	public int hashCode() {
-		return Objects.hash(path, idUsuario);
+		return Objects.hash(nombre, idUsuario);
 	}
 
 	@Override
@@ -67,12 +67,12 @@ public class Registro {
 		if (getClass() != obj.getClass())
 			return false;
 		Registro other = (Registro) obj;
-		return Objects.equals(path, other.path) && Objects.equals(idUsuario, other.idUsuario);
+		return Objects.equals(nombre, other.nombre) && Objects.equals(idUsuario, other.idUsuario);
 	}
 
 	@Override
 	public String toString() {
-		return "Registro [id=" + id + ", path=" + path + ", idUsuario=" + idUsuario + "]";
+		return "Registro [id=" + id + ", nombre=" + nombre + ", idUsuario=" + idUsuario + "]";
 	}
-	
+
 }
