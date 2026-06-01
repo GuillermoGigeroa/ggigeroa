@@ -1,8 +1,25 @@
 ### Detalles del proyecto
 
-Aplicación Spring Boot 3.5.10 que demuestra patrones de desarrollo profesional en Java. Incluye REST API, autenticación segura, Swagger UI y soporte para base de datos MySQL opcional.
+Este es un proyecto personal, una aplicación web desarrollada para mis amigos de Navari Design: https://www.instagram.com/navari_desing/.
 
-## 🛠️ Tecnologías
+Demo en vivo: https://guillermogigeroa.github.io/navari_design/
+
+El resto del proyecto es una aplicación Spring Boot 3.5.10 que demuestra patrones de desarrollo profesional en Java. Incluye REST API, autenticación segura, Swagger UI y soporte para base de datos MySQL opcional.
+
+## 🛠️ Tecnologías del frontend
+
+- **Framework**: Angular 21.2.15
+- **Node**: Recomendado >=18
+- **Package Manager**: npm
+- **Estilos**: Bootstrap 5.2.3 + SCSS
+- **Testing**: Jasmine + Karma
+
+# Requisitos
+
+- **Node.js** 18 o superior
+- **Angular CLI** (compatible con la versión del proyecto)
+
+## 🛠️ Tecnologías del backend
 
 - **Java 17** - Lenguaje
 - **Spring Boot 3.5.10** - Framework
@@ -14,9 +31,7 @@ Aplicación Spring Boot 3.5.10 que demuestra patrones de desarrollo profesional 
 - **SLF4J + Logback** - Logging
 - **Maven** - Build tool
 
-## 🚀 Inicio Rápido
-
-### Requisitos
+### Requisitos del backend
 
 - Java 17+
 - Maven 3.8+ (incluido: `mvnw`)

@@ -1,0 +1,30 @@
+$background-slides: rgba(0,0,0,.7);
+$background-slides-buttons: rgba(0,0,0,.7);
+
+.contenedor {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin: 2em;
+}
+
+.centro {
+    width: 50%;
+}
+
+.carousel-caption {
+    background-color: $background-slides;
+    border-radius: 1em;
+}
+
+.carousel-control-prev-icon {
+    background-color: $background-slides-buttons;
+    border-radius: 1em;
+    padding: 2em;
+}
+
+.carousel-control-next-icon {
+    background-color: $background-slides-buttons;
+    border-radius: 1em;
+    padding: 2em;
+}
