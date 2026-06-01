@@ -1,4 +1,4 @@
-# Sistema de Impresora
+### Detalles del proyecto
 
 Aplicación Spring Boot 3.5.10 que demuestra patrones de desarrollo profesional en Java. Incluye REST API, autenticación segura, Swagger UI y soporte para base de datos MySQL opcional.
 
@@ -64,24 +64,7 @@ Ejemplo de uso de API (cURL):
 curl -u ggigeroa:admin -X GET http://localhost:8080/api/registros
 ```
 
-## 📂 Estructura
+## Licencia
 
-- `src/main/java/` - Código fuente
-- `src/main/resources/` - Configuración
-- `agent.md` - Contexto técnico (IA)
-
-## ✨ Características
-
-- ✅ REST API con CRUD completo
-- ✅ MVC con templates HTML
-- ✅ HTTP Basic Authentication
-- ✅ Swagger/OpenAPI integrado
-- ✅ Logging centralizado (SLF4J)
-- ✅ Funciona sin BD disponible
-- ✅ Procesamiento asíncrono en background
-- ✅ Manejo global de excepciones
-- ✅ Respuestas JSON estandarizadas
-
-## 📞 Soporte
-
-Más información disponible en `agent.md`.
+© 2026 Guillermo A. Gigeroa – Todos los derechos reservados.
+Ver [LICENSE](./LICENSE) para más detalles.
