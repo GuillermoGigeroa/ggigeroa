@@ -1,8 +1,8 @@
 ### Detalles del proyecto
 
-Este es un proyecto personal, una aplicación web desarrollada para mis amigos de Navari Design: https://www.instagram.com/navari_desing/.
+Este es un proyecto personal, una aplicación fullstack para un ecommerce de stickers para unos amigos.
 
-Demo en vivo: https://guillermogigeroa.github.io/navari_design/
+Demo en vivo: https://guillermogigeroa.github.io/sticker_ecommerce/
 
 El resto del proyecto es una aplicación Spring Boot 3.5.10 que demuestra patrones de desarrollo profesional en Java. Incluye REST API, autenticación segura, Swagger UI y soporte para base de datos MySQL opcional.
 
