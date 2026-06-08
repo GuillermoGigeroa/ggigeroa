@@ -1,0 +1,1 @@
+npm run build-java;rm -r ./src/main/resources/templates;cp -r ./docs/. ./src/main/resources/templates;

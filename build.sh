@@ -1,1 +1,1 @@
-npm run build;cp -r ./docs/. ./src/main/resources/templates;git add .;git commit -m "build '/docs' files";git push;
+npm run build;git add .;git commit -m "build '/docs' files";git push;
