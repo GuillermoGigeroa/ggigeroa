@@ -1,9 +1,70 @@
+$background-color: rgba(255, 255, 255, 0.9);
+$background-color-card: rgba(202, 202, 202, 0.9);
+$text-color: rgba(0, 0, 0, 1);
+
 .main {
     display: flex;
     align-items: center;
     justify-content: center;
+    flex-wrap: wrap;
 }
 
 .navbar {
-    background-color: rgba(255, 255, 255, 0.8);
+    background-color: $background-color;
+}
+
+.card {
+    background-color: $background-color-card;
+    color: $text-color;
+    min-height: 330px;
+    margin: 10px;
+    display: flex;
+}
+
+.card img {
+    min-width: 100px;
+    max-width: 250px;
+}
+
+.card .card-body {
+    display: flex;
+    align-items: flex-end;
+    justify-content: center;
+    padding: 0;
+}
+
+.header {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    z-index: 1000;
+}
+
+.header-bottom {
+    margin-top: 5em;
+}
+
+.container-fluid {
+    padding-right: 2px !important;
+    padding-left: 2px !important;
+}
+
+.logo {
+    width: 32px;
+    height: 32px;
+    margin-left: 5px;
+    margin-right: 5px;
+}
+
+.isologotipo {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: row;
+    flex-wrap: nowrap;
+}
+
+.iso {
+    font-family: monospace;
 }
